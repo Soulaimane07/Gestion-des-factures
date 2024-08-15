@@ -6,7 +6,7 @@ import Error from '../../Components/Error'
 import axios from "axios"
 import { useDispatch } from 'react-redux'
 import { login } from '../../Components/Redux/Slices/UserSlice'
-
+ 
 function Login() {
     DocumentTitle("Amazon | Login")
 
