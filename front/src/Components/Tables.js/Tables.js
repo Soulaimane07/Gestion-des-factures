@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import Nodata from "./Nodata"
+import {Nodata} from "./Nodata"
 
-export const FournisseurTable = ({fournisseurs, clientName}) => {
+export const FournisseurTable = ({fournisseurs}) => {
     return (
         <div className="overflow-x-auto ">
             {fournisseurs?.length > 0 &&
@@ -62,7 +62,7 @@ export const FournisseurTable = ({fournisseurs, clientName}) => {
             }
 
             {fournisseurs?.length === 0 &&
-                <Nodata text={`No fournisseurs ${clientName && "this client"}`} />
+                <Nodata text={`No fournisseurs`} />
             }
         </div>
     )

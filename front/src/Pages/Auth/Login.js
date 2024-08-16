@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Logo, ServerUrl } from '../../Components/Variables'
+import { LogoWhite, ServerUrl } from '../../Components/Variables'
 import { DocumentTitle } from '../../Components/Functions'
 import Spinner from '../../Components/Spinner'
 import Error from '../../Components/Error'
@@ -39,8 +39,8 @@ function Login() {
     } 
 
   return (
-    <div className='px-20 py-16 flex items-center justify-center h-screen'>
-        <img src={Logo} className='w-28 absolute top-14 left-20' alt='logo' />
+    <div className='px-20 py-16 flex items-center justify-center h-screen text-gray-700'>
+        <img src={LogoWhite} className='w-60 absolute top-14 left-20' alt='logo' />
         
         <div className='w-1/3'>
             <h1 className='text-center text-3xl font-medium mb-10'> Log in your account </h1>
@@ -49,17 +49,17 @@ function Login() {
             <form onSubmit={LoginFun} className="max-w-sm mx-auto mt-4">
                 <div className="mb-5">
                     <label htmlFor="email" className="block mb-2 text-md font-medium text-gray-900">Your email</label>
-                    <input onChange={(e)=> setEmail(e.target.value)} type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-yellow-500 dark:focus:border-yellow-500" />
+                    <input onChange={(e)=> setEmail(e.target.value)} type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" />
                 </div>
                 <div className="mb-5">
                     <label htmlFor="password" className="block mb-2 text-md font-medium text-gray-900 ">Your password</label>
-                    <input onChange={(e)=> setPassword(e.target.value)} type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-yellow-500 dark:focus:border-yellow-500" />
+                    <input onChange={(e)=> setPassword(e.target.value)} type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" />
                 </div>
                 
                 <button 
                     disabled={consittion}
                     type="submit" 
-                    className={` ${consittion ? "bg-yellow-500 opacity-50" : "opacity-100 bg-yellow-500 hover:bg-yellow-600"}  transition-all text-white flex items-center justify-center   focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-md px-5 py-2.5 text-center  w-full`}>
+                    className={` ${consittion ? "bg-orange-500 opacity-50" : "opacity-100 bg-orange-500 hover:bg-orange-600"}  transition-all text-white flex items-center justify-center   focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-md px-5 py-2.5 text-center  w-full`}>
                     {scroll ? <Spinner /> : "Login" }
                 </button>
             </form>

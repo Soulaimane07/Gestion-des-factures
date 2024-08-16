@@ -2,7 +2,7 @@ import React from 'react'
 import { TbFileSearch } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 
-function Nodata({text}) {
+export const NodataFor = ({text}) => {
   return (
     <div className='mx-auto py-20 w-full justify-center flex flex-col text-center'>
         <TbFileSearch size={100} className=' mx-auto opacity-80' />
@@ -16,4 +16,11 @@ function Nodata({text}) {
   )
 }
 
-export default Nodata
+export const Nodata = ({text}) => {
+  return (
+    <div className='mx-auto py-20 w-full justify-center flex flex-col text-center'>
+        <TbFileSearch size={100} className=' mx-auto opacity-80' />
+        <p className='font-medium mt-4 text-lg'> {text} </p>
+    </div>
+  )
+}
