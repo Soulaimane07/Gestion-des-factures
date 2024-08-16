@@ -62,7 +62,7 @@ function Navbar() {
         </div>
     
         <div
-            className={`${open ? 'top-18 opacity-100 inline transition-all' : '-top-14 opacity-0 hidden transition-all'} text-left border-t-2 border-black border-opacity-5 shadow-md transition-all px-6 py-4 absolute right-0 bg-white w-80`}
+            className={`${open ? 'top-18 opacity-100 inline transition-all' : '-top-14 opacity-0 hidden transition-all'} text-left z-50 border-t-2 border-black border-opacity-5 shadow-md transition-all px-6 py-4 absolute right-0 bg-white w-80`}
         >
             <h1 className='text-sm opacity-80 mb-6'> Account ID: {user?._id} </h1>
             <button onClick={()=> dispatch(logout())} className='w-full bg-orange-400 hover:bg-orange-600 transition-all py-2 rounded-md text-white'> Logout </button>

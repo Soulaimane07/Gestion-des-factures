@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { fetchFournisseurs } from './Redux/Slices/FournisseurSlice'
+import { fetchFournisseurs } from '../Redux/Slices/FournisseurSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { GiAnticlockwiseRotation } from 'react-icons/gi'
-import { ServerUrl } from './Variables'
-import { fetchClient, fetchClients } from './Redux/Slices/ClientSlice'
+import { ServerUrl } from '../Variables'
+import { fetchClient, fetchClients } from '../Redux/Slices/ClientSlice'
 import axios from 'axios'
-import Spinner from './Spinner'
+import Spinner from '../Spinner'
 
 function CreateFournisseur({client, setOpen}) {
     const dispatch = useDispatch()
