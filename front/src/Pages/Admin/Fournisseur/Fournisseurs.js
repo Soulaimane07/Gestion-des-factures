@@ -1,79 +1,50 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from '../../../Components/Navbar'
-import Header from '../../../Components/Table/Header'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { DocumentTitle } from '../../../Components/Functions'
+import { FournisseurTable } from '../../../Components/Tables.js/Tables'
+import { MainHeader } from '../../../Components/Headers/Headers'
+import { clearSearch, setSearch } from '../../../Components/Redux/Slices/FournisseurSlice'
+import Footer from '../../../Components/Footer/Footer'
 
 function Fournisseurs() {
     DocumentTitle("Amazon | Fournisseurs")
+    const dispatch = useDispatch();
 
-    const fournisseurs = useSelector(state=> state.fournisseurs.data)
+    useEffect(()=> {
+        window.scrollTo(0, 0)
+        dispatch(clearSearch())
+    }, [])
+
+    const { data: fournisseurs, search } = useSelector(state => state.fournisseurs);
+
+    const filteredFournisseurs = fournisseurs?.filter(fournisseur =>
+        fournisseur?.name?.toLowerCase().includes(search?.toLowerCase())
+    );
+
+    const handleSearchChange = (e) => {
+        dispatch(setSearch(e.target.value));
+    }
 
   return (
     <>
         <Navbar />
 
-        <div className='min-h-screen px-20 py-16 bg-gray-50'>
-            <Header header={{title:"Fournisseurs", length: fournisseurs?.length}} button="Create fournisseur" link="create" search="Search for fournisseurs" />
+        <div className='min-h-screen px-20 py-16 bg-gray-50 text-gray-700'>
+            <MainHeader
+                header={{title:"Fournisseurs", length: filteredFournisseurs?.length}}
+                button="Create fournisseur"
+                link="create"
+                search="Search for fournisseur name"
+                handleSearchChange={handleSearchChange}
+            />
 
-            <div className="overflow-x-auto mt-8">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" className="px-6 py-3">
-                                Fournisseur ID
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Nom complet
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Raison Social
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                IF
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                ICE
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Code tiers
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Type activité
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {fournisseurs?.map((item,key)=> (
-                            <tr key={key} className="bg-white border-b text-gray-900  dark:border-gray-200">
-                                <th scope="row" className="px-6 py-4 font-medium  whitespace-nowrap ">
-                                    <Link to={`${item?._id}`} className='hover:text-yellow-400 transition-all underline text-blue-500'> {item._id} </Link>
-                                </th>
-                                <td className="px-6 py-4">
-                                    {item.name}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {item.raisonsocial}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {item.if}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {item.ice}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {item.code}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {item.activite}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className='mt-8'>
+              <FournisseurTable fournisseurs={filteredFournisseurs} />
             </div>
         </div>
+
+        <Footer />
     </>
   )
 }

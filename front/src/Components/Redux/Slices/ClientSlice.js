@@ -25,9 +25,17 @@ export const ClientSlice = createSlice({
   name: 'clients',
   initialState: {
     data: [],
-    client: {}
+    client: {},
+    search: ""
   },
-  reducers: {},
+  reducers: {
+    setSearch: (state, action) => {  // Add action to set search query
+        state.search = action.payload;
+    },
+    clearSearch: (state, action) => {  // Add action to set search query
+        state.search = ""
+    }
+  },
   extraReducers: (builder) => {
     builder
         .addCase(fetchClients.fulfilled, (state, action) => {
@@ -41,4 +49,5 @@ export const ClientSlice = createSlice({
   }
 })
 
+export const { setSearch, clearSearch } = ClientSlice.actions;
 export default ClientSlice.reducer

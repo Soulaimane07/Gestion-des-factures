@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios"
@@ -7,9 +7,13 @@ import Spinner from '../../../Components/Spinner';
 import { fetchFournisseurs } from '../../../Components/Redux/Slices/FournisseurSlice';
 import { useDispatch } from 'react-redux';
 import { DocumentTitle } from '../../../Components/Functions';
+import Footer from '../../../Components/Footer/Footer';
 
 function Create() {
     DocumentTitle("Amazon | Creer Fournisseur")
+    useEffect(()=> {
+        window.scrollTo(0, 0)
+    }, [])
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -46,7 +50,7 @@ function Create() {
     <>
         <Navbar />
 
-        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50'>
+        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'> Create Fournisseur </h1>
 
             <div className=' bg-white mt-10 shadow-md '>
@@ -93,12 +97,14 @@ function Create() {
                 <button 
                     disabled={cond}
                     onClick={CreateFun} 
-                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-yellow-500'} bg-yellow-400 transition-all px-4 w-auto flex justify-center items-center py-2 font-medium`}
+                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-orange-600'} bg-orange-500 text-white transition-all px-4 w-auto flex justify-center items-center py-2 font-medium`}
                 > 
                     {scroll ? <Spinner /> : "Create fournisseur " }
                 </button>
             </div>
         </div>
+
+        <Footer />
     </>
   )
 }

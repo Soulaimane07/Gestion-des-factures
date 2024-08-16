@@ -28,7 +28,7 @@ router.post('/', (req, res, next) => {
         ice: Number(req.body.ice),
         natureclient: req.body.natureclient,
         exoneration: Number(req.body.exoneration),
-        fournisseur: req.body.fournisseur,
+        fournisseurs: req.body.fournisseurs,
     })
 
     client.save()
@@ -46,7 +46,7 @@ router.get('/:clientId', (req, res, next) => {
 
     Client.findOne({_id: clientId})
         .select("_id name raisonsocial if ice natureclient exoneration fournisseur")
-        .populate('fournisseur')
+        .populate('fournisseurs')
         .exec()
         .then(docs => {
             res.status(200).json(docs)

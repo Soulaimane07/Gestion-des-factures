@@ -11,6 +11,7 @@ import UpdateClient from '../Pages/Admin/Client/Update';
 import UpdateFour from '../Pages/Admin/Fournisseur/Update';
 import Remove from '../Components/Remove';
 import { useSelector } from 'react-redux';
+import SelectFournisseurs from '../Pages/Admin/Client/SelectFournisseurs';
 
 function Admin() {
   const openned = useSelector(state => state.remove.oppened)
@@ -25,11 +26,12 @@ function Admin() {
           <Route path="create" element={<CreateClient />} />
           <Route path=":clientid" element={<Client />} />
           <Route path=":clientid/update" element={<UpdateClient />} />
+          {/* <Route path=":clientid/select_fournisseurs" element={<SelectFournisseurs />} /> */}
         </Route>
         <Route path='/fournisseurs'>
           <Route index element={<Fournisseurs />} />
-          <Route path=":fournisseurid" element={<Fournisseur />} />
           <Route path="create" element={<CreateFour />} />
+          <Route path=":fournisseurid" element={<Fournisseur />} />
           <Route path=":fournisseurid/update" element={<UpdateFour />} />
         </Route>
         

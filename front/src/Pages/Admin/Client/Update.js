@@ -7,9 +7,13 @@ import Spinner from '../../../Components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClient, fetchClients } from '../../../Components/Redux/Slices/ClientSlice';
 import { DocumentTitle } from '../../../Components/Functions';
+import Footer from '../../../Components/Footer/Footer';
 
 function Update() {
     DocumentTitle("Amazon | Creer Client")
+    useEffect(()=> {
+        window.scrollTo(0, 0)
+    }, [])
     const {clientid} = useParams()
 
     const dispatch = useDispatch()
@@ -51,7 +55,7 @@ function Update() {
     <>
         <Navbar />
 
-        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50'>
+        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'> Update Client - <i className='text-sm'> ( {clientid} ) </i> </h1>
 
             <div className=' bg-white mt-10 shadow-md '>
@@ -103,12 +107,14 @@ function Update() {
                 <button 
                     disabled={cond}
                     onClick={CreateFun} 
-                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-yellow-500'} bg-yellow-400 transition-all px-4 w-40 flex justify-center items-center py-2 font-medium`}
+                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-orange-600'} bg-orange-500 text-white transition-all px-4 w-40 flex justify-center items-center py-2 font-medium`}
                 > 
                     {scroll ? <Spinner /> : "Update Client " }
                 </button>
             </div>
         </div>
+
+        <Footer />
     </>
   )
 }

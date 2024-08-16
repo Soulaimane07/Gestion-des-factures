@@ -25,9 +25,17 @@ export const FournisseurSlice = createSlice({
   name: 'fournisseurs',
   initialState: {
     data: [],
-    fournisseur: {}
+    fournisseur: {},
+    search: ""
   },
-  reducers: {},
+  reducers: {
+    setSearch: (state, action) => {  // Add action to set search query
+      state.search = action.payload;
+    },
+    clearSearch: (state, action) => {  // Add action to set search query
+        state.search = ""
+    }
+  },
   extraReducers: (builder) => {
     builder
     .addCase(fetchFournisseurs.fulfilled, (state, action) => {
@@ -41,4 +49,5 @@ export const FournisseurSlice = createSlice({
   },
 })
 
+export const { setSearch, clearSearch } = FournisseurSlice.actions;
 export default FournisseurSlice.reducer

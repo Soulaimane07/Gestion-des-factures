@@ -7,10 +7,14 @@ import Spinner from '../../../Components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFournisseur, fetchFournisseurs } from '../../../Components/Redux/Slices/FournisseurSlice';
 import { DocumentTitle } from '../../../Components/Functions';
+import Footer from '../../../Components/Footer/Footer';
 
 function Update() {
     DocumentTitle("Amazon | Update Fournisseur")
     const {fournisseurid} = useParams()
+    useEffect(()=> {
+        window.scrollTo(0, 0)
+    }, [])
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -30,7 +34,6 @@ function Update() {
     const [ice, setIce] = useState(fournisseur?.ice)
     const [code, setCode] = useState(fournisseur?.code)
     const [activite, setActivite] = useState(fournisseur?.activite)
-    console.log({name, raisonsocial, if: iff, ice, code, activite});
 
     const CreateFun = () => {
         setScroll(true)
@@ -53,7 +56,7 @@ function Update() {
     <>
         <Navbar />
 
-        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50'>
+        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'> Update Fournisseur - <i className='text-sm'> ( {fournisseurid} ) </i> </h1>
 
             <div className=' bg-white mt-10 shadow-md '>
@@ -100,12 +103,14 @@ function Update() {
                 <button 
                     disabled={cond}
                     onClick={CreateFun} 
-                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-yellow-500'} bg-yellow-400 transition-all px-4 w-40 flex justify-center items-center py-2 font-medium`}
+                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-orange-600'} bg-orange-500 text-white transition-all px-6 w-48 flex justify-center items-center py-2 font-medium`}
                 > 
                     {scroll ? <Spinner /> : "Update Fournisseur " }
                 </button>
             </div>
         </div>
+
+        <Footer />
     </>
   )
 }

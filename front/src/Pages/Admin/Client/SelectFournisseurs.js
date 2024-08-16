@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios"
 import { ServerUrl } from '../../../Components/Variables';
 import Spinner from '../../../Components/Spinner';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchClients } from '../../../Components/Redux/Slices/ClientSlice';
 import { DocumentTitle } from '../../../Components/Functions';
-import Footer from '../../../Components/Footer/Footer';
+import { FournisseurTable } from '../../../Components/Tables.js/Tables';
+// import Header from '../../../Components/Table/Header';
 
-function Create() {
+function SelectFournisseurs() {
+    DocumentTitle("Amazon | Creer Client")
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    DocumentTitle("Amazon | Creer Client")
-    useEffect(()=> {
-        window.scrollTo(0, 0)
-    }, [])
-
     const [scroll, setScroll] = useState(false)
     
     
@@ -44,17 +42,24 @@ function Create() {
 
     const cond = name?.length === 0 || raisonsocial?.length === 0 || iff?.length <= 0 || ice?.length <= 0 || natureclient?.length === 0 || exoneration === null
 
+    const fournisseurs = useSelector(state => state.fournisseurs.data)
+
+
   return (
     <>
         <Navbar />
 
-        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50 text-gray-700'>
-            <h1 className='text-3xl w-full font-medium'> Create Client </h1>
+        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50'>
+            <h1 className='text-3xl w-full font-medium'> Select Fournisseurs </h1>
 
-            <div className=' bg-white mt-10 shadow-md '>
-                <h2 className='text-lg font-medium mb-2 bg-gray-100 bg-opacity-80 py-6 px-6'> General configuration </h2>
+            <div className=' p-10 py-8 bg-white mt-10 shadow-md '>
+                {/* <Header header={{title:"Fournisseurs", length: fournisseurs?.length}} button="Create Fournisseur" link="/fournisseurs/create" search="Search for fournisseur" /> */}
 
-                <div className='py-6 px-6'>
+                <div className='mt-10'> 
+                  <FournisseurTable fournisseurs={fournisseurs} />
+                </div>
+
+                {/* <div className='py-6 px-6'>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Nom Complet </label>
                         <input onChange={(e)=> setName(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
@@ -92,7 +97,7 @@ function Create() {
                             <label htmlFor='inclus'>Inlus</label>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className='flex items-center space-x-4 mt-10 justify-end'>
@@ -100,16 +105,14 @@ function Create() {
                 <button 
                     disabled={cond}
                     onClick={CreateFun} 
-                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-orange-600'} bg-orange-500 text-white transition-all px-4 w-40 flex justify-center items-center py-2 font-medium`}
+                    className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-yellow-500'} bg-yellow-400 transition-all px-4 w-40 flex justify-center items-center py-2 font-medium`}
                 > 
                     {scroll ? <Spinner /> : "Create Client " }
                 </button>
             </div>
         </div>
-
-        <Footer />
     </>
   )
 }
 
-export default Create
+export default SelectFournisseurs

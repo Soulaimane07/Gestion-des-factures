@@ -8,11 +8,10 @@ const clientSchema = mongoose.Schema({
     ice: Number,
     natureclient: String,
     exoneration: Boolean,
-    fournisseur: { 
+    fournisseurs: [{ 
         type: mongoose.Schema.Types.ObjectId,
         ref: "Fournisseur",
-        unique: false,
-    },
+    }],
 })
 
 module.exports = mongoose.model('Client', clientSchema)

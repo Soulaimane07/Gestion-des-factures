@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useParams } from 'react-router-dom'
 import { DocumentTitle } from '../../../Components/Functions'
-import CreateFournisseur from '../../../Components/CreateFournisseur'
 import { GoTriangleDown, GoTriangleRight } from 'react-icons/go'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchClient } from '../../../Components/Redux/Slices/ClientSlice'
 import { openRemove } from '../../../Components/Redux/Slices/RemoveSlice'
+import { FournisseurTable } from '../../../Components/Tables.js/Tables'
+import { GreenBadget, RedBadget } from '../../../Components/Badges'
+import Footer from '../../../Components/Footer/Footer'
 
 
 function Client() {
     const {clientid} = useParams()
     DocumentTitle(`Amazon | Client - ${clientid}`)
+    useEffect(()=> {
+        window.scrollTo(0, 0)
+    }, [])
 
     const dispatch= useDispatch()
 
@@ -20,6 +25,8 @@ function Client() {
     }, [clientid])
 
     const client = useSelector(state => state.clients.client)
+    
+    
 
     const [open, setOpen] = useState(false)
 
@@ -28,15 +35,15 @@ function Client() {
     <>
         <Navbar />
 
-        <div className='min-h-screen px-20 py-16 bg-gray-50'>
+        <div className='min-h-screen px-20 py-16 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'>  {client?.name} <i className='text-lg'> ( {client?._id} )</i> </h1>
             
             <div className=' bg-white mt-10 shadow-md '>
                 <h2 className=' flex items-center justify-between font-medium mb-2 bg-gray-100 bg-opacity-80 py-6 px-6'> 
                     <p className='text-lg'>Details </p>
-                    <div className='flex items-center space-x-6'>
-                        <Link to={"update"} className='bg-yellow-400 px-6 py-2 hover:bg-yellow-500 transition-all text-md'>Update</Link>
-                        <button onClick={()=> dispatch(openRemove({id: clientid, type: "client"}))} className='bg-yellow-400 px-6 py-2 hover:bg-yellow-500 transition-all text-md'>Delete</button>
+                    <div className='flex items-center space-x-2 text-white'>
+                        <Link to={"update"} className='bg-orange-500 px-6 py-2 hover:bg-orange-600 transition-all text-md'>Update</Link>
+                        <button onClick={()=> dispatch(openRemove({id: clientid, type: "client"}))} className='bg-orange-500 px-6 py-2 hover:bg-orange-600 transition-all text-md'>Delete</button>
                     </div>
                 </h2>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-6'>
@@ -66,51 +73,33 @@ function Client() {
                         </div>
                         <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Exoneration </label>
-                            <p> {client?.exoneration ? 'Inclus' : 'Exclus'}  </p>
+                            <p>
+                                {client?.exoneration 
+                                    ?   <GreenBadget text="Inclus" /> 
+                                    :   <RedBadget text="Exclus" />  
+                                }
+                            </p>
                         </div>
                 </div>
             </div>
 
             <div className=' bg-white mt-10 shadow-md '>
                 <button onClick={()=> setOpen(!open)} className='w-full font-medium mb-2 bg-gray-100 bg-opacity-80 py-6 px-6 flex items-center'> 
-                    {!client?.fournisseur && (open ? <GoTriangleDown size={30} /> : <GoTriangleRight size={30} /> )}
-                    <p className='text-lg'> Fournisseur </p>
+                    {open ? <GoTriangleDown size={30} /> : <GoTriangleRight size={30} /> }
+                    <p className='text-lg'> Fournisseurs ( {client?.fournisseurs?.length} ) </p>
                 </button>
-                {client?.fournisseur &&
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-6'>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> Account ID </label>
-                                <p> {client?.fournisseur?._id} </p>
-                            </div>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> Nom Complet </label>
-                                <p> {client?.fournisseur?.name} </p>
-                            </div>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> Raison social </label>
-                                <p> {client?.fournisseur?.raisonsocial} </p>
-                            </div>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> IF <i className='text-sm mb-2 opacity-80'> | Description sur IF </i>  </label>
-                                <p> {client?.fournisseur?.if} </p>
-                            </div>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> ICE <i className='text-sm mb-2 opacity-80'> | Description sur ICE </i> </label>
-                                <p> {client?.fournisseur?.ice} </p>
-                            </div>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> Type activité </label>
-                                <p> {client?.fournisseur?.activite} </p>
-                            </div>
-                            <div className='flex flex-col mb-6'>
-                                <label className='mb-2 opacity-60'> Code tiers </label>
-                                <p> {client?.fournisseur?.code}  </p>
-                            </div>
+                
+                {open &&
+                    <div className='px-8'>
+                        <FournisseurTable fournisseurs={client?.fournisseurs} clientName={true} />
                     </div>
                 }
-                {!client?.fournisseur && open && <CreateFournisseur client={client} setOpen={setOpen} />}
+
+                {/* {!client?.fournisseur && open && <CreateFournisseur client={client} setOpen={setOpen} />} */}
             </div>
         </div>
+
+        <Footer />
     </>
   )
 }
