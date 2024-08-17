@@ -4,7 +4,7 @@ import { DocumentTitle, GetData, GetDataa } from '../../../Components/Functions'
 import Navbar from '../../../Components/Navbar';
 import { openRemove } from '../../../Components/Redux/Slices/RemoveSlice';
 import { useDispatch } from 'react-redux';
-import { MainCLientsTable } from '../../../Components/Tables.js/Clients';
+import { MainCLientsTable, SecondCLientsTable } from '../../../Components/Tables.js/Clients';
 import Footer from '../../../Components/Footer/Footer';
 
 function Fournisseur() {
@@ -69,7 +69,7 @@ function Fournisseur() {
             <div className="overflow-x-auto mt-8 shadow-md">
                 <h2 className='text-lg font-medium bg-gray-100 bg-opacity-80 py-6 px-6'> Clients ( {clients?.length ?? 0} ) </h2>
                 {clients?.length !== 0 &&
-                    <MainCLientsTable clients={clients} />
+                    <SecondCLientsTable clients={clients} />
                 }
             </div>
         </div>
