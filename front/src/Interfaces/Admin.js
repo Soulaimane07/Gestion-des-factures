@@ -26,7 +26,7 @@ function Admin() {
           <Route path="create" element={<CreateClient />} />
           <Route path=":clientid" element={<Client />} />
           <Route path=":clientid/update" element={<UpdateClient />} />
-          {/* <Route path=":clientid/select_fournisseurs" element={<SelectFournisseurs />} /> */}
+          <Route path=":clientid/select_fournisseurs" element={<SelectFournisseurs />} />
         </Route>
         <Route path='/fournisseurs'>
           <Route index element={<Fournisseurs />} />

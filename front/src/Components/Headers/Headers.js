@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import SearchBox from "../Search/SearchBox"
 
-export const MainHeader = ({ header, button, link, search, handleSearchChange }) => {
+export const MainHeader = ({ header, button, link, search, handleSearchChange, select }) => {
     return (
         <div className='flex flex-col md:flex-row text-gray-700 items-center justify-between'>
             <h1 className='text-3xl w-full font-medium'>{header?.title} ({header?.length})</h1>

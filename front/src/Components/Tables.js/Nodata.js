@@ -9,7 +9,7 @@ export const NodataFor = ({text}) => {
         <p className='font-medium mt-4 text-lg'> {text} </p>
         <div className=' space-x-4 mx-auto mt-10 flex items-stretch'>
             <Link to={'select_fournisseurs'} className='bg-orange-500 hover:bg-orange-600 text-white transition-all py-2 px-5 rounded-sm font-medium'> 
-                Select Fournisseurs 
+                Select or Create Fournisseurs 
             </Link>
         </div>
     </div>

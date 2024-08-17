@@ -7,7 +7,8 @@ import Spinner from '../../../Components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClients } from '../../../Components/Redux/Slices/ClientSlice';
 import { DocumentTitle } from '../../../Components/Functions';
-import { FournisseurTable } from '../../../Components/Tables.js/Tables';
+import { FournisseurSelectTable, FournisseurTable } from '../../../Components/Tables.js/Tables';
+import { MainHeader } from '../../../Components/Headers/Headers';
 // import Header from '../../../Components/Table/Header';
 
 function SelectFournisseurs() {
@@ -42,6 +43,10 @@ function SelectFournisseurs() {
 
     const cond = name?.length === 0 || raisonsocial?.length === 0 || iff?.length <= 0 || ice?.length <= 0 || natureclient?.length === 0 || exoneration === null
 
+
+
+
+
     const fournisseurs = useSelector(state => state.fournisseurs.data)
 
 
@@ -49,14 +54,15 @@ function SelectFournisseurs() {
     <>
         <Navbar />
 
-        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50'>
+        <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'> Select Fournisseurs </h1>
 
             <div className=' p-10 py-8 bg-white mt-10 shadow-md '>
                 {/* <Header header={{title:"Fournisseurs", length: fournisseurs?.length}} button="Create Fournisseur" link="/fournisseurs/create" search="Search for fournisseur" /> */}
 
                 <div className='mt-10'> 
-                  <FournisseurTable fournisseurs={fournisseurs} />
+                    <MainHeader />
+                    <FournisseurSelectTable fournisseurs={fournisseurs} />
                 </div>
 
                 {/* <div className='py-6 px-6'>
@@ -107,7 +113,7 @@ function SelectFournisseurs() {
                     onClick={CreateFun} 
                     className={`${cond ? 'opacity-40' : ' opacity-100 hover:bg-yellow-500'} bg-yellow-400 transition-all px-4 w-40 flex justify-center items-center py-2 font-medium`}
                 > 
-                    {scroll ? <Spinner /> : "Create Client " }
+                    {scroll ? <Spinner /> : "Finish" }
                 </button>
             </div>
         </div>
