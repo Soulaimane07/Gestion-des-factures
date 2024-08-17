@@ -27,15 +27,16 @@ function Client() {
     const client = useSelector(state => state.clients.client)
     
     
+    
 
     const [open, setOpen] = useState(false)
-
+    
 
   return (
     <>
         <Navbar />
 
-        <div className='min-h-screen px-20 py-16 bg-gray-50 text-gray-700'>
+        <div className='min-h-screen px-20 py-16 pb-40 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'>  {client?.name} <i className='text-lg'> ( {client?._id} )</i> </h1>
             
             <div className=' bg-white mt-10 shadow-md '>
@@ -83,14 +84,21 @@ function Client() {
                 </div>
             </div>
 
-            <div className=' bg-white mt-10 shadow-md '>
-                <button onClick={()=> setOpen(!open)} className='w-full font-medium mb-2 bg-gray-100 bg-opacity-80 py-6 px-6 flex items-center'> 
-                    {open ? <GoTriangleDown size={30} /> : <GoTriangleRight size={30} /> }
-                    <p className='text-lg'> Fournisseurs ( {client?.fournisseurs?.length} ) </p>
-                </button>
+            <div className=' bg-white mt-10 shadow-md'>
+                <div className='flex items-center w-full font-medium  bg-gray-100 bg-opacity-80 py-6 px-6'>
+                    <button onClick={()=> setOpen(!open)} className='flex-1 font-medium  flex items-center'> 
+                        {open ? <GoTriangleDown size={30} /> : <GoTriangleRight size={30} /> }
+                        <p className='text-lg'> Fournisseurs ( {client?.fournisseurs?.length} ) </p>
+                    </button>
+                    {(client?.fournisseurs?.length > 0 && open) && (
+                        <Link to={'select_fournisseurs'} className='bg-orange-500 hover:bg-orange-600 text-white transition-all py-2 px-5 rounded-sm font-medium'> 
+                            Select or Remove Fournisseurs 
+                        </Link>
+                    )}
+                </div>
                 
                 {open &&
-                    <div className='px-8'>
+                    <div className='pb-20'>
                         <FournisseurTable fournisseurs={client?.fournisseurs} client={true} />
                     </div>
                 }

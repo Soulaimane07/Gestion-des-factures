@@ -59,18 +59,17 @@ router.get('/:fournisseurId', (req, res, next) => {
 router.get('/:fournisseurId/clients', (req, res, next) => {
     const fournisseurId = req.params.fournisseurId;
 
-    Client.find({ fournisseur: fournisseurId })  // Find clients with the specified fournisseurId
+    Client.find({ fournisseurs: fournisseurId }) 
         .select("_id name raisonsocial if ice natureclient exoneration")
         .exec()
         .then(clients => {
-            res.status(200).json(clients);
+            res.status(200).json(clients); // Return the list of clients in the response
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
+            console.error(err);
+            res.status(500).json({ error: err }); // Handle any errors
         });
 });
-
 
 router.patch('/:fournisseurId', (req, res, next) => {
     const fournisseurId = req.params.fournisseurId

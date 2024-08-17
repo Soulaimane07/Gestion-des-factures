@@ -6,7 +6,7 @@ const Client = require('../models/client')
 
 router.get('/', (req, res, next) => {
     Client.find()
-        .select('_id name raisonsocial if ice natureclient exoneration fournisseur')
+        .select('_id name raisonsocial if ice natureclient exoneration fournisseurs')
         .exec()
         .then(docs => {
             res.status(200).json(docs)
@@ -41,11 +41,38 @@ router.post('/', (req, res, next) => {
         })
 })
 
+router.post('/selectfournisseurs', (req, res, next) => {
+    const client = req.body.client
+    const fournisseurs = req.body.fournisseurs
+
+    const UpdateClient = {
+        name: client.name,
+        raisonsocial: client.raisonsocial,
+        if: client.if,
+        ice: client.ice,
+        natureclient: client.natureclient,
+        exoneration: client.exoneration,
+        fournisseurs: fournisseurs,
+    }
+
+    Client.updateOne({_id: client._id}, {$set: UpdateClient})
+        .exec()
+        .then(docs => {
+            res.status(200).json(docs)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+})
+
 router.get('/:clientId', (req, res, next) => {
     const clientId = req.params.clientId
 
     Client.findOne({_id: clientId})
-        .select("_id name raisonsocial if ice natureclient exoneration fournisseur")
+        .select("_id name raisonsocial if ice natureclient exoneration fournisseurs")
         .populate('fournisseurs')
         .exec()
         .then(docs => {
@@ -67,7 +94,7 @@ router.patch('/:clientId', (req, res, next) => {
         ice: req.body.ice,
         natureclient: req.body.natureclient,
         exoneration: req.body.exoneration,
-        fournisseur: req.body.fournisseur,
+        fournisseurs: req.body.fournisseurs,
     }
 
     Client.updateOne({_id: clientId}, {$set: UpdateClient})
