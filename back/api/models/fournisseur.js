@@ -12,6 +12,7 @@ const fournisseurSchema = mongoose.Schema({
     forme: Number,
     reglementation: Boolean,
     fiscale: Boolean,
+    ras: Number,
 })
 
 module.exports = mongoose.model('Fournisseur', fournisseurSchema)

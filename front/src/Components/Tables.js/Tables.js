@@ -30,6 +30,9 @@ export const FournisseurTable = ({fournisseurs, client}) => {
                             <th scope="col" className="px-6 py-3">
                                 Type activité
                             </th>
+                            <th scope="col" className="px-6 py-3">
+                                Taux Ras
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,6 +58,9 @@ export const FournisseurTable = ({fournisseurs, client}) => {
                                 </td>
                                 <td className="px-6 py-4">
                                     {fournisseurVars?.activite[item?.activite]?.title}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.ras}%
                                 </td>
                             </tr>
                         ))}
@@ -94,6 +100,9 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                             <th scope="col" className="px-6 py-3">ICE</th>
                             <th scope="col" className="px-6 py-3">Code tiers</th>
                             <th scope="col" className="px-6 py-3">Type activité</th>
+                            <th scope="col" className="px-6 py-3">
+                                Taux Ras
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,6 +128,9 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                                 <td className="px-6 py-4">{item.ice}</td>
                                 <td className="px-6 py-4">{item.code}</td>
                                 <td className="px-6 py-4"> {fournisseurVars?.activite[item?.activite]?.title}</td>
+                                <td className="px-6 py-4">
+                                    {item.ras}%
+                                </td>
                             </tr>
                         ))}
                     </tbody>

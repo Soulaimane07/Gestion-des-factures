@@ -7,7 +7,7 @@ const Client = require('../models/client')
 
 router.get('/', (req, res, next) => {
     Fournisseur.find()
-        .select('_id name raisonsocial if ice code exoneration activite forme reglementation fiscale')
+        .select('_id name raisonsocial if ice code ras exoneration activite forme reglementation fiscale')
         .exec()
         .then(docs => {
             res.status(200).json(docs)
@@ -33,6 +33,7 @@ router.post('/', (req, res, next) => {
         forme: Number(req.body.forme),
         reglementation: req.body.reglementation,
         fiscale: req.body.fiscale,
+        ras: Number(req.body.ras),
     })
 
     fournisseur.save()
@@ -49,7 +50,7 @@ router.get('/:fournisseurId', (req, res, next) => {
     const fournisseurId = req.params.fournisseurId
 
     Fournisseur.findOne({_id: fournisseurId})
-        .select("_id name raisonsocial if ice code exoneration activite forme reglementation fiscale")
+        .select("_id name raisonsocial if ice code ras exoneration activite forme reglementation fiscale")
         .exec()
         .then(docs => {
             res.status(200).json(docs)
@@ -89,6 +90,7 @@ router.patch('/:fournisseurId', (req, res, next) => {
         forme: Number(req.body.forme),
         reglementation: req.body.reglementation,
         fiscale: req.body.fiscale,
+        ras: Number(req.body.ras),
     }
 
     Fournisseur.updateOne({_id: fournisseurId}, {$set: UpdateFournisseur})
