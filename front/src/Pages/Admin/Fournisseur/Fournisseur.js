@@ -20,7 +20,7 @@ function Fournisseur() {
     const fournisseur = GetDataa(`/fournisseurs/${fournisseurid}`)
     const clients = GetData(`/fournisseurs/${fournisseurid}/clients`)
 
-    console.log(fournisseur);
+    console.log(clients);
     
 
   return (

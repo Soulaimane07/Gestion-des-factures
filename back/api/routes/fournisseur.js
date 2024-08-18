@@ -64,7 +64,7 @@ router.get('/:fournisseurId/clients', (req, res, next) => {
     const fournisseurId = req.params.fournisseurId;
 
     Client.find({ fournisseurs: fournisseurId }) 
-        .select("_id name raisonsocial if ice code exoneration activite forme reglementation fiscale")
+        .select("_id name raisonsocial if ice natureclient exoneration")
         .exec()
         .then(clients => {
             res.status(200).json(clients); // Return the list of clients in the response
