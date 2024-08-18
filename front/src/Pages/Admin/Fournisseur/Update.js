@@ -129,7 +129,7 @@ function Update() {
                         </div>
                     </div>
                     <div className='flex flex-col mb-6'>
-                        <label className='mb-2'> Application de la réglementation des monde public </label>
+                        <label className='mb-2'> Application de la réglementation des marchés publics </label>
                         <div className='grid grid-cols-2 items-start space-x-4'>
                             <button onClick={()=> setReglementation(true)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
                                 <input onChange={(e)=> setReglementation(e.target.value)} value={true} checked={reglementation === true} name='reglementation' id='oui' type='radio' />
@@ -142,7 +142,7 @@ function Update() {
                         </div>
                     </div>
                     <div className='flex flex-col mb-6'>
-                        <label className='mb-2'> Présentation de l'attestation de régularité fiscale depuis de 6 mois </label>
+                        <label className='mb-2'> Présentation de l'attestation de régularité fiscale depuis moins de 6 mois </label>
                         <div className='grid grid-cols-2 items-start space-x-4'>
                             <button onClick={()=> setFiscale(true)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
                                 <input onChange={(e)=> setFiscale(e.target.value)} value={true} checked={fiscale === true} name='fiscale' id='oui' type='radio' />

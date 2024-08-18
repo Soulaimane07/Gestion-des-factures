@@ -82,7 +82,7 @@ function Fournisseur() {
                         <p> {fournisseurVars?.forme[fournisseur?.forme]?.title} </p>
                     </div>
                     <div className='flex flex-col mb-6'>
-                        <label className='mb-2 opacity-60'> Application de la réglementation des monde public </label>
+                        <label className='mb-2 opacity-60'> Application de la réglementation des marchés publics </label>
                         <p>
                             {fournisseur?.reglementation 
                                 ?   <GreenBadget text="Oui" /> 
@@ -91,7 +91,7 @@ function Fournisseur() {
                         </p>
                     </div>
                     <div className='flex flex-col mb-6'>
-                        <label className='mb-2 opacity-60'> Présentation de l'attestation de régularité fiscale depuis de 6 mois </label>
+                        <label className='mb-2 opacity-60'> Présentation de l'attestation de régularité fiscale depuis moins de 6 mois </label>
                         <p>
                             {fournisseur?.fiscale 
                                 ?   <GreenBadget text="Oui" /> 
