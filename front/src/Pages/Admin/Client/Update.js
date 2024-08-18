@@ -10,7 +10,7 @@ import { DocumentTitle } from '../../../Components/Functions';
 import Footer from '../../../Components/Footer/Footer';
 
 function Update() {
-    DocumentTitle("Amazon | Creer Client")
+    DocumentTitle("Fizazi & Associes | Modifier Client")
     useEffect(()=> {
         window.scrollTo(0, 0)
     }, [])

@@ -10,7 +10,7 @@ import { DocumentTitle } from '../../../Components/Functions';
 import Footer from '../../../Components/Footer/Footer';
 
 function Create() {
-    DocumentTitle("Amazon | Creer Fournisseur")
+    DocumentTitle("Fizazi & Associes | Créer Fournisseur")
     useEffect(()=> {
         window.scrollTo(0, 0)
     }, [])
@@ -26,6 +26,10 @@ function Create() {
     const [ice, setIce] = useState(null)
     const [code, setCode] = useState("")
     const [activite, setActivite] = useState(null)
+    const [exoneration, setExoneration] = useState(null)
+    const [personne, setPersonne] = useState(null)
+    const [reglementation, setReglementation] = useState(null)
+    const [fiscale, setFiscale] = useState(null)
 
 
     const CreateFun = () => {
@@ -87,6 +91,50 @@ function Create() {
                         <div className='flex items-stretch space-x-2'>
                             <input onChange={(e)=> setActivite(e.target.value)} value="Bien d'équipement" name="activite" id="Bien d'équipement" type='radio' />
                             <label htmlFor="Bien d'équipement">Bien d'équipement</label>
+                        </div>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2'> Forme Juridique </label>
+                        <div className='flex items-stretch space-x-2 mb-1'>
+                            <input onChange={(e)=> setPersonne(e.target.value)} value={"morale"} name='personne' id="morale" type='radio' />
+                            <label htmlFor="morale">Personne Morale soumis à l'IS</label>
+                        </div>
+                        <div className='flex items-stretch space-x-2'>
+                            <input onChange={(e)=> setPersonne(e.target.value)} value="physique" name="personne" id="physique" type='radio' />
+                            <label htmlFor="physique">Personne Physique soumis à l'IR</label>
+                        </div>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2'> Exoneration </label>
+                        <div className='flex items-stretch space-x-2 mb-1'>
+                            <input onChange={(e)=> setExoneration(e.target.value)} value={0} name='h' id='exclus' type='radio' />
+                            <label htmlFor='exclus'>Exclus</label>
+                        </div>
+                        <div className='flex items-stretch space-x-2'>
+                            <input onChange={(e)=> setExoneration(e.target.value)} value={1} name='h' id='inclus' type='radio' />
+                            <label htmlFor='inclus'>Inlus</label>
+                        </div>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2'> Application de la réglementation des monde public </label>
+                        <div className='flex items-stretch space-x-2 mb-1'>
+                            <input onChange={(e)=> setReglementation(e.target.value)} value={true} name='regulation' id='Rtrue' type='radio' />
+                            <label htmlFor='Rtrue'>Oui</label>
+                        </div>
+                        <div className='flex items-stretch space-x-2'>
+                            <input onChange={(e)=> setReglementation(e.target.value)} value={false} name='regulation' id='Rfalse' type='radio' />
+                            <label htmlFor='Rfalse'>Non</label>
+                        </div>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2'> Présentation de l'attestation de régularité fiscale depuis de 6 mois </label>
+                        <div className='flex items-stretch space-x-2 mb-1'>
+                            <input onChange={(e)=> setFiscale(e.target.value)} value={true} name='fiscale' id='Ftrue' type='radio' />
+                            <label htmlFor='Ftrue'>Oui</label>
+                        </div>
+                        <div className='flex items-stretch space-x-2'>
+                            <input onChange={(e)=> setFiscale(e.target.value)} value={false} name='fiscale' id='Ffalse' type='radio' />
+                            <label htmlFor='Ffalse'>Non</label>
                         </div>
                     </div>
                 </div>

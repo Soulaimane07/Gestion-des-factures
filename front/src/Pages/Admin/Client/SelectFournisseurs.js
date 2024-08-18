@@ -15,7 +15,7 @@ import { GoTriangleDown, GoTriangleRight } from 'react-icons/go';
 import Footer from '../../../Components/Footer/Footer';
 
 function SelectFournisseurs() {
-    DocumentTitle("Amazon | Select fournisseurs")
+    DocumentTitle("Fizazi & Associes | Select fournisseurs")
 
     const dispatch = useDispatch()
     const navigate = useNavigate()

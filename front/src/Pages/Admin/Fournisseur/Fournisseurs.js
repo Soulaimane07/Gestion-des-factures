@@ -8,7 +8,7 @@ import { clearSearch, setSearch } from '../../../Components/Redux/Slices/Fournis
 import Footer from '../../../Components/Footer/Footer'
 
 function Fournisseurs() {
-    DocumentTitle("Amazon | Fournisseurs")
+    DocumentTitle("Fizazi & Associes | Fournisseurs")
     const dispatch = useDispatch();
 
     useEffect(()=> {

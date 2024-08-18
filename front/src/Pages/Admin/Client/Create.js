@@ -12,7 +12,7 @@ import Footer from '../../../Components/Footer/Footer';
 function Create() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    DocumentTitle("Amazon | Creer Client")
+    DocumentTitle("Fizazi & Associes | Créer Client")
     useEffect(()=> {
         window.scrollTo(0, 0)
     }, [])

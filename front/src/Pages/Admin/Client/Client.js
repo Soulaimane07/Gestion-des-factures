@@ -13,7 +13,7 @@ import Footer from '../../../Components/Footer/Footer'
 
 function Client() {
     const {clientid} = useParams()
-    DocumentTitle(`Amazon | Client - ${clientid}`)
+    DocumentTitle(`Fizazi & Associes | Client`)
     useEffect(()=> {
         window.scrollTo(0, 0)
     }, [])

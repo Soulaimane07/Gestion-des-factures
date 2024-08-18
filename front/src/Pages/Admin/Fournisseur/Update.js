@@ -10,7 +10,7 @@ import { DocumentTitle } from '../../../Components/Functions';
 import Footer from '../../../Components/Footer/Footer';
 
 function Update() {
-    DocumentTitle("Amazon | Update Fournisseur")
+    DocumentTitle("Fizazi & Associes | Update Fournisseur")
     const {fournisseurid} = useParams()
     useEffect(()=> {
         window.scrollTo(0, 0)

@@ -4,7 +4,7 @@ import { DocumentTitle, GetData, GetDataa } from '../../../Components/Functions'
 import Navbar from '../../../Components/Navbar';
 import { openRemove } from '../../../Components/Redux/Slices/RemoveSlice';
 import { useDispatch } from 'react-redux';
-import { MainCLientsTable, SecondCLientsTable } from '../../../Components/Tables.js/Clients';
+import { SecondCLientsTable } from '../../../Components/Tables.js/Clients';
 import Footer from '../../../Components/Footer/Footer';
 
 function Fournisseur() {
@@ -14,7 +14,7 @@ function Fournisseur() {
         window.scrollTo(0, 0)
     }, [])
 
-    DocumentTitle(`Amazon | Fournisseur - ${fournisseurid}`)
+    DocumentTitle(`Fizazi & Associes | Fournisseur`)
     const fournisseur = GetDataa(`/fournisseurs/${fournisseurid}`)
     const clients = GetData(`/fournisseurs/${fournisseurid}/clients`)
 

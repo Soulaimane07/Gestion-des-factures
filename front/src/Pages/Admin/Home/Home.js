@@ -6,7 +6,7 @@ import { DocumentTitle } from '../../../Components/Functions'
 import Footer from '../../../Components/Footer/Footer'
 
 function Home() {
-  DocumentTitle("Amazon")
+  DocumentTitle("Fizazi & Associes")
 
 const cards = [
   {

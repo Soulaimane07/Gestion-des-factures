@@ -8,7 +8,7 @@ import { MainCLientsTable } from '../../../Components/Tables.js/Clients';
 import Footer from '../../../Components/Footer/Footer';
 
 function Clients() {
-    DocumentTitle("Amazon | Clients");
+    DocumentTitle("Fizazi & Associes | Clients");
     const dispatch = useDispatch();
 
     useEffect(()=> {
