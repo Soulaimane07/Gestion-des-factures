@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { GreenBadget, RedBadget } from "../Badges"
 import { GoDash } from "react-icons/go"
 import { Nodata } from "./Nodata"
+import { clientvars } from "../Variables"
 
 export const MainCLientsTable = ({clients}) => {
     return (
@@ -57,7 +58,7 @@ export const MainCLientsTable = ({clients}) => {
                                     {item.ice}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {item.natureclient}
+                                    {clientvars?.nature[item.natureclient]?.title?.length > 40 ? clientvars?.nature[item.natureclient]?.title?.slice(0, 40) + '...' : clientvars?.nature[item.natureclient]?.title}
                                 </td>
                                 <td className="px-6 py-4">
                                     {item.exoneration

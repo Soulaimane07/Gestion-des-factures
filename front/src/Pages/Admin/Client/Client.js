@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useParams } from 'react-router-dom'
 import { DocumentTitle } from '../../../Components/Functions'
-import { GoTriangleDown, GoTriangleRight } from 'react-icons/go'
+import { GoDash, GoTriangleDown, GoTriangleRight } from 'react-icons/go'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchClient } from '../../../Components/Redux/Slices/ClientSlice'
 import { openRemove } from '../../../Components/Redux/Slices/RemoveSlice'
 import { FournisseurTable } from '../../../Components/Tables.js/Tables'
 import { GreenBadget, RedBadget } from '../../../Components/Badges'
 import Footer from '../../../Components/Footer/Footer'
+import { clientvars, ServerUrl } from '../../../Components/Variables'
 
 
 function Client() {
@@ -25,11 +26,9 @@ function Client() {
     }, [clientid])
 
     const client = useSelector(state => state.clients.client)
-    
-    
-    
 
     const [open, setOpen] = useState(false)
+    
     
 
   return (
@@ -48,6 +47,10 @@ function Client() {
                     </div>
                 </h2>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-6'>
+                        <div className='flex flex-col mb-6'>
+                            <label className='mb-2 opacity-60'> Profile </label>
+                            {client?.profile ? <img src={`${ServerUrl}/${client?.profile}`} alt='profile' className='min-w-40 max-w-60' /> : <span className=''><GoDash /></span>}
+                        </div>
                         <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Account ID </label>
                             <p> {client?._id} </p>
@@ -70,7 +73,7 @@ function Client() {
                         </div>
                         <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Nature du Client </label>
-                            <p> {client?.natureclient} </p>
+                            <p className='pr-20'> {clientvars?.nature[client?.natureclient]?.title} </p>
                         </div>
                         <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Exoneration </label>

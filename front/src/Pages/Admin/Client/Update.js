@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from "axios"
-import { ServerUrl } from '../../../Components/Variables';
+import { clientvars, ServerUrl } from '../../../Components/Variables';
 import Spinner from '../../../Components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClient, fetchClients } from '../../../Components/Redux/Slices/ClientSlice';
 import { DocumentTitle } from '../../../Components/Functions';
 import Footer from '../../../Components/Footer/Footer';
+import { IoClose } from 'react-icons/io5';
 
 function Update() {
     DocumentTitle("Fizazi & Associes | Modifier Client")
@@ -33,11 +34,18 @@ function Update() {
     const [ice, setIce] = useState(client?.ice)
     const [natureclient, setNature] = useState(client?.natureclient)
     const [exoneration, setExoneration] = useState(null)
+    const [profile, setProfile] = useState(client?.profile)
+    console.log(profile);
+    
 
     const CreateFun = () => {
         setScroll(true)
 
-        axios.patch(`${ServerUrl}/clients/${clientid}`, {name, raisonsocial, if: iff, ice, natureclient, exoneration, fournisseur: client?.fournisseur})
+        axios.patch(`${ServerUrl}/clients/${clientid}`, {name, raisonsocial, if: iff, ice, natureclient, exoneration, fournisseur: client?.fournisseur, profile},
+            {headers: {
+                'Content-Type': 'multipart/form-data'
+            }}
+        )
         .then((res)=> {
             setScroll(false)
             navigate(`/clients/${clientid}`)
@@ -51,6 +59,15 @@ function Update() {
 
     const cond = false
 
+    const [image, setImage] = useState(`${ServerUrl}/${client?.profile}`)
+
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setProfile(event.target.files[0])
+            setImage(URL.createObjectURL(event.target.files[0]));
+        }
+    }
+
   return (
     <>
         <Navbar />
@@ -58,34 +75,56 @@ function Update() {
         <div className='min-h-screen px-10 md:px-20 py-16 bg-gray-50 text-gray-700'>
             <h1 className='text-3xl w-full font-medium'> Update Client - <i className='text-sm'> ( {clientid} ) </i> </h1>
 
-            <div className=' bg-white mt-10 shadow-md '>
+            <div className=' bg-white mt-10 shadow-md'>
                 <h2 className='text-lg font-medium mb-2 bg-gray-100 bg-opacity-80 py-6 px-6'> General configuration </h2>
 
-                <div className='py-6 px-6'>
+                <div className='py-6 px-6 w-full md:w-1/3'>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2'> Profile </label>
+                        {profile && 
+                            <div className=' relative w-60'>
+                                <button onClick={()=> (setImage(null) & setProfile(null))} className=' text-white p-2 absolute top-0 right-0 bg-gray-600 hover:bg-opacity-60 transition-all rounded-md'> <IoClose size={20} /> </button>
+                                <img alt="preview image " className=' w-full mx-auto rounded-md mb-6' src={image}/>
+                            </div>
+                        }
+                        {!profile && <div className="flex items-center justify-center">
+                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor"  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p className="text-xs text-gray-500">PNG, JPG</p>
+                                </div>
+                                <input id="dropzone-file" onChange={onImageChange} type="file" className="hidden" accept="image/png, image/jpeg" />
+                            </label>
+                        </div> }
+                    </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Nom Complet </label>
-                        <input onChange={(e)=> setName(e.target.value)} value={name} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setName(e.target.value)} value={name} type='text' className='border-2 border-gray-300 rounded-sm py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Raison social </label>
-                        <input onChange={(e)=> setRaison(e.target.value)} value={raisonsocial} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setRaison(e.target.value)} value={raisonsocial} type='text' className='border-2 border-gray-300 rounded-sm py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-1'> IF   </label>
                         <i className='text-sm mb-2'> Description sur IF </i>
-                        <input onChange={(e)=> setIf(e.target.value)} value={iff} type='number' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setIf(e.target.value)} value={iff} type='number' className='border-2 border-gray-300 rounded-sm py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-1'> ICE </label>
                         <i className='text-sm mb-2'> Description sur ICE </i>
-                        <input onChange={(e)=> setIce(e.target.value)} value={ice} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setIce(e.target.value)} value={ice} type='text' className='border-2 border-gray-300 rounded-sm py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Nature du Client </label>
-                        <select onChange={(e)=> setNature(e.target.value)} value={natureclient} className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4'>
+                        <select onChange={(e)=> setNature(e.target.value)} value={natureclient} className='border-2 border-gray-300 rounded-sm py-1 px-4'>
                             <option value={""}> Select nature de client </option>
-                            <option value={"etat"}>Etat</option>
-                            <option value={"collective"}>Collectivite territorieles</option>
+                            {clientvars?.nature?.map((item,key)=> (
+                                <option value={item.val} key={key}> {item.title} </option>
+                            ))}
                         </select>
                     </div>
                     <div className='flex flex-col mb-6'>

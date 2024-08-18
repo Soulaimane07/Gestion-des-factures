@@ -1,12 +1,25 @@
 const express = require("express")
 const router = express.Router()
 const mongoose = require('mongoose')
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/profiles/clients'); // specify your upload folder
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
 
 const Client = require('../models/client')
 
 router.get('/', (req, res, next) => {
     Client.find()
-        .select('_id name raisonsocial if ice natureclient exoneration fournisseurs')
+        .select('_id profile name raisonsocial if ice natureclient exoneration fournisseurs')
         .exec()
         .then(docs => {
             res.status(200).json(docs)
@@ -19,27 +32,28 @@ router.get('/', (req, res, next) => {
         })
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('profile'), (req, res, next) => {
     const client = new Client({
         _id: new mongoose.Types.ObjectId(),
+        profile: req?.file?.path, // the path of the uploaded image
         name: req.body.name,
         raisonsocial: req.body.raisonsocial,
         if: Number(req.body.if),
         ice: Number(req.body.ice),
-        natureclient: req.body.natureclient,
-        exoneration: Number(req.body.exoneration),
+        natureclient: Number(req.body.natureclient),
+        exoneration: req.body.exoneration,
         fournisseurs: req.body.fournisseurs,
-    })
+    });
 
     client.save()
         .then(docs => {
-            res.status(201).json(docs)
+            res.status(201).json(docs);
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({error: err})
-        })
-})
+            res.status(500).json({ error: err });
+        });
+});
 
 router.post('/selectfournisseurs', (req, res, next) => {
     const client = req.body.client
@@ -72,7 +86,7 @@ router.get('/:clientId', (req, res, next) => {
     const clientId = req.params.clientId
 
     Client.findOne({_id: clientId})
-        .select("_id name raisonsocial if ice natureclient exoneration fournisseurs")
+        .select("_id profile name raisonsocial if ice natureclient exoneration fournisseurs")
         .populate('fournisseurs')
         .exec()
         .then(docs => {
@@ -84,10 +98,11 @@ router.get('/:clientId', (req, res, next) => {
         })
 })
 
-router.patch('/:clientId', (req, res, next) => {
+router.patch('/:clientId',  upload.single('profile'), (req, res, next) => {
     const clientId = req.params.clientId
 
     const UpdateClient = {
+        profile: req?.file?.path ?? null,
         name: req.body.name,
         raisonsocial: req.body.raisonsocial,
         if: req.body.if,
