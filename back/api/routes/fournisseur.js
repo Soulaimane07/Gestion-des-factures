@@ -7,7 +7,7 @@ const Client = require('../models/client')
 
 router.get('/', (req, res, next) => {
     Fournisseur.find()
-        .select('_id name raisonsocial if ice code activite')
+        .select('_id name raisonsocial if ice code exoneration activite forme reglementation fiscale')
         .exec()
         .then(docs => {
             res.status(200).json(docs)
@@ -28,7 +28,11 @@ router.post('/', (req, res, next) => {
         if: Number(req.body.if),
         ice: Number(req.body.ice),
         code: req.body.code,
-        activite: req.body.activite,
+        exoneration: req.body.exoneration,
+        activite: Number(req.body.activite),
+        forme: Number(req.body.forme),
+        reglementation: req.body.reglementation,
+        fiscale: req.body.fiscale,
     })
 
     fournisseur.save()
@@ -45,7 +49,7 @@ router.get('/:fournisseurId', (req, res, next) => {
     const fournisseurId = req.params.fournisseurId
 
     Fournisseur.findOne({_id: fournisseurId})
-        .select("_id name raisonsocial if ice code activite")
+        .select("_id name raisonsocial if ice code exoneration activite forme reglementation fiscale")
         .exec()
         .then(docs => {
             res.status(200).json(docs)
@@ -60,7 +64,7 @@ router.get('/:fournisseurId/clients', (req, res, next) => {
     const fournisseurId = req.params.fournisseurId;
 
     Client.find({ fournisseurs: fournisseurId }) 
-        .select("_id name raisonsocial if ice natureclient exoneration")
+        .select("_id name raisonsocial if ice code exoneration activite forme reglementation fiscale")
         .exec()
         .then(clients => {
             res.status(200).json(clients); // Return the list of clients in the response
@@ -80,7 +84,11 @@ router.patch('/:fournisseurId', (req, res, next) => {
         if: Number(req.body.if),
         ice: Number(req.body.ice),
         code: req.body.code,
-        activite: req.body.activite,
+        exoneration: req.body.exoneration,
+        activite: Number(req.body.activite),
+        forme: Number(req.body.forme),
+        reglementation: req.body.reglementation,
+        fiscale: req.body.fiscale,
     }
 
     Fournisseur.updateOne({_id: fournisseurId}, {$set: UpdateFournisseur})

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios"
-import { ServerUrl } from '../../../Components/Variables';
+import { fournisseurVars, ServerUrl } from '../../../Components/Variables';
 import Spinner from '../../../Components/Spinner';
 import { fetchFournisseurs } from '../../../Components/Redux/Slices/FournisseurSlice';
 import { useDispatch } from 'react-redux';
@@ -27,7 +27,7 @@ function Create() {
     const [code, setCode] = useState("")
     const [activite, setActivite] = useState(null)
     const [exoneration, setExoneration] = useState(null)
-    const [personne, setPersonne] = useState(null)
+    const [forme, setForme] = useState(null)
     const [reglementation, setReglementation] = useState(null)
     const [fiscale, setFiscale] = useState(null)
 
@@ -35,7 +35,7 @@ function Create() {
     const CreateFun = () => {
         setScroll(true)
 
-        axios.post(`${ServerUrl}/fournisseurs`, {name, raisonsocial, if: iff, ice, code, activite})
+        axios.post(`${ServerUrl}/fournisseurs`, {name, raisonsocial, if: iff, ice, code, activite, exoneration, forme, reglementation, fiscale})
         .then((res)=> {
             setScroll(false)
             navigate('/fournisseurs')
@@ -47,7 +47,7 @@ function Create() {
         })
     }
 
-    const cond = name?.length === 0 || raisonsocial?.length === 0 || iff?.length <= 0 || ice?.length <= 0 || code?.length === 0 || activite === null
+    const cond = name?.length === 0 || raisonsocial?.length === 0 || iff?.length <= 0 || ice?.length <= 0 || code?.length === 0 || activite === null || exoneration === null || forme === null || fiscale === null || reglementation === null
 
 
   return (
@@ -58,83 +58,93 @@ function Create() {
             <h1 className='text-3xl w-full font-medium'> Create Fournisseur </h1>
 
             <div className=' bg-white mt-10 shadow-md '>
-                <div className='py-6 px-6'>
+                <div className='py-6 px-6 w-full md:w-1/2'>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Nom Complet </label>
-                        <input onChange={(e)=> setName(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setName(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm  py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Raison social </label>
-                        <input onChange={(e)=> setRaison(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setRaison(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm  py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-1'> IF   </label>
                         <i className='text-sm mb-2'> Description sur IF </i>
-                        <input onChange={(e)=> setIf(e.target.value)} type='number' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setIf(e.target.value)} type='number' className='border-2 border-gray-300 rounded-sm  py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-1'> ICE </label>
                         <i className='text-sm mb-2'> Description sur ICE </i>
-                        <input onChange={(e)=> setIce(e.target.value)} type='Number' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setIce(e.target.value)} type='Number' className='border-2 border-gray-300 rounded-sm  py-1 px-4' />
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-1'> Code tiers </label>
                         <i className='text-sm mb-2'> Description sur Code tiers </i>
-                        <input onChange={(e)=> setCode(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm w-full md:w-1/3 py-1 px-4' />
+                        <input onChange={(e)=> setCode(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm  py-1 px-4' />
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2'> Exoneration </label>
+                        <div className='grid grid-cols-2 items-start space-x-4'>
+                            <button onClick={()=> setExoneration(false)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setExoneration(e.target.value)} value={false} checked={exoneration === false} name='exoneration' id='exclus' type='radio' />
+                                <label htmlFor='exclus'>Exclus</label>
+                            </button>
+                            <button onClick={()=> setExoneration(true)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setExoneration(e.target.value)} value={true} checked={exoneration === true} name='exoneration' id='inclus' type='radio' />
+                                <label htmlFor='inclus'>Inlus</label>
+                            </button>
+                        </div>
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Type d'activité </label>
-                        <div className='flex items-stretch space-x-2 mb-1'>
-                            <input onChange={(e)=> setActivite(e.target.value)} value={"Prestation de service"} name='activite' id="Prestation de service" type='radio' />
-                            <label htmlFor="Prestation de service">Prestation de service</label>
-                        </div>
-                        <div className='flex items-stretch space-x-2'>
-                            <input onChange={(e)=> setActivite(e.target.value)} value="Bien d'équipement" name="activite" id="Bien d'équipement" type='radio' />
-                            <label htmlFor="Bien d'équipement">Bien d'équipement</label>
+                        <div className='grid grid-cols-2 items-start text-left space-x-4'>
+                            <button onClick={()=> setActivite(0)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setActivite(e.target.value)} value={0} checked={activite === 0} name='activite' id={fournisseurVars?.activite[0].title} type='radio' />
+                                <label htmlFor={fournisseurVars?.activite[0].title}> {fournisseurVars?.activite[0].title} </label>
+                            </button>
+                            <button onClick={()=> setActivite(1)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setActivite(e.target.value)} value={1} checked={activite === 1} name='activite' id={fournisseurVars?.activite[1].title} type='radio' />
+                                <label htmlFor={fournisseurVars?.activite[1].title}> {fournisseurVars?.activite[1].title} </label>
+                            </button>
                         </div>
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Forme Juridique </label>
-                        <div className='flex items-stretch space-x-2 mb-1'>
-                            <input onChange={(e)=> setPersonne(e.target.value)} value={"morale"} name='personne' id="morale" type='radio' />
-                            <label htmlFor="morale">Personne Morale soumis à l'IS</label>
-                        </div>
-                        <div className='flex items-stretch space-x-2'>
-                            <input onChange={(e)=> setPersonne(e.target.value)} value="physique" name="personne" id="physique" type='radio' />
-                            <label htmlFor="physique">Personne Physique soumis à l'IR</label>
-                        </div>
-                    </div>
-                    <div className='flex flex-col mb-6'>
-                        <label className='mb-2'> Exoneration </label>
-                        <div className='flex items-stretch space-x-2 mb-1'>
-                            <input onChange={(e)=> setExoneration(e.target.value)} value={0} name='h' id='exclus' type='radio' />
-                            <label htmlFor='exclus'>Exclus</label>
-                        </div>
-                        <div className='flex items-stretch space-x-2'>
-                            <input onChange={(e)=> setExoneration(e.target.value)} value={1} name='h' id='inclus' type='radio' />
-                            <label htmlFor='inclus'>Inlus</label>
+                        <div className='grid grid-cols-2 items-start text-left space-x-4'>
+                            <button onClick={()=> setForme(0)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setForme(e.target.value)} value={0} checked={forme === 0} name='forme' id={fournisseurVars?.forme[0].title} type='radio' />
+                                <label htmlFor={fournisseurVars?.forme[0].title}> {fournisseurVars?.forme[0].title} </label>
+                            </button>
+                            <button onClick={()=> setForme(1)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setForme(e.target.value)} value={1} checked={forme === 1} name='forme' id={fournisseurVars?.forme[1].title} type='radio' />
+                                <label htmlFor={fournisseurVars?.forme[1].title}> {fournisseurVars?.forme[1].title} </label>
+                            </button>
                         </div>
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Application de la réglementation des monde public </label>
-                        <div className='flex items-stretch space-x-2 mb-1'>
-                            <input onChange={(e)=> setReglementation(e.target.value)} value={true} name='regulation' id='Rtrue' type='radio' />
-                            <label htmlFor='Rtrue'>Oui</label>
-                        </div>
-                        <div className='flex items-stretch space-x-2'>
-                            <input onChange={(e)=> setReglementation(e.target.value)} value={false} name='regulation' id='Rfalse' type='radio' />
-                            <label htmlFor='Rfalse'>Non</label>
+                        <div className='grid grid-cols-2 items-start space-x-4'>
+                            <button onClick={()=> setReglementation(true)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setReglementation(e.target.value)} value={true} checked={reglementation === true} name='reglementation' id='oui' type='radio' />
+                                <label htmlFor='oui'>Oui</label>
+                            </button>
+                            <button onClick={()=> setReglementation(false)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setReglementation(e.target.value)} value={false} checked={reglementation === false} name='reglementation' id='non' type='radio' />
+                                <label htmlFor='non'>Non</label>
+                            </button>
                         </div>
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Présentation de l'attestation de régularité fiscale depuis de 6 mois </label>
-                        <div className='flex items-stretch space-x-2 mb-1'>
-                            <input onChange={(e)=> setFiscale(e.target.value)} value={true} name='fiscale' id='Ftrue' type='radio' />
-                            <label htmlFor='Ftrue'>Oui</label>
-                        </div>
-                        <div className='flex items-stretch space-x-2'>
-                            <input onChange={(e)=> setFiscale(e.target.value)} value={false} name='fiscale' id='Ffalse' type='radio' />
-                            <label htmlFor='Ffalse'>Non</label>
+                        <div className='grid grid-cols-2 items-start space-x-4'>
+                            <button onClick={()=> setFiscale(true)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setFiscale(e.target.value)} value={true} checked={fiscale === true} name='fiscale' id='oui' type='radio' />
+                                <label htmlFor='oui'>Oui</label>
+                            </button>
+                            <button onClick={()=> setFiscale(false)} className='flex items-stretch space-x-2 mb-1 border-2 p-4'>
+                                <input onChange={(e)=> setFiscale(e.target.value)} value={false} checked={fiscale === false} name='fiscale' id='non' type='radio' />
+                                <label htmlFor='non'>Non</label>
+                            </button>
                         </div>
                     </div>
                 </div>

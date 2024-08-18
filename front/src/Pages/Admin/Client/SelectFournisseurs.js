@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../../Components/Navbar'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from "axios"
-import { ServerUrl } from '../../../Components/Variables';
+import { clientvars, ServerUrl } from '../../../Components/Variables';
 import Spinner from '../../../Components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClient, fetchClients } from '../../../Components/Redux/Slices/ClientSlice';
@@ -11,7 +11,7 @@ import { FournisseurSelectTable } from '../../../Components/Tables.js/Tables';
 import { MainHeader } from '../../../Components/Headers/Headers';
 import { clearSearch, fetchFournisseurs, setSearch } from '../../../Components/Redux/Slices/FournisseurSlice';
 import { GreenBadget, RedBadget } from '../../../Components/Badges';
-import { GoTriangleDown, GoTriangleRight } from 'react-icons/go';
+import { GoDash, GoTriangleDown, GoTriangleRight } from 'react-icons/go';
 import Footer from '../../../Components/Footer/Footer';
 
 function SelectFournisseurs() {
@@ -119,6 +119,10 @@ function SelectFournisseurs() {
                 {open &&(
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-8'>
                         <div className='flex flex-col mb-6'>
+                            <label className='mb-2 opacity-60'> Profile </label>
+                            {client?.profile ? <img src={`${ServerUrl}/${client?.profile}`} alt='profile' className='min-w-40 max-w-60' /> : <span className=''><GoDash /></span>}
+                        </div>
+                        <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Account ID </label>
                             <p> {client?._id} </p>
                         </div>
@@ -140,7 +144,7 @@ function SelectFournisseurs() {
                         </div>
                         <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Nature du Client </label>
-                            <p> {client?.natureclient} </p>
+                            <p className='pr-20'> {clientvars?.nature[client?.natureclient]?.title} </p>
                         </div>
                         <div className='flex flex-col mb-6'>
                             <label className='mb-2 opacity-60'> Exoneration </label>

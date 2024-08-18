@@ -7,7 +7,11 @@ const fournisseurSchema = mongoose.Schema({
     if: Number,
     ice: Number,
     code: String,
-    activite: String,
+    exoneration: Number,
+    activite: Number,
+    forme: Number,
+    reglementation: Boolean,
+    fiscale: Boolean,
 })
 
 module.exports = mongoose.model('Fournisseur', fournisseurSchema)

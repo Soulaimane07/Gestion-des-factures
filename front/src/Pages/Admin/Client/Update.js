@@ -35,8 +35,6 @@ function Update() {
     const [natureclient, setNature] = useState(client?.natureclient)
     const [exoneration, setExoneration] = useState(null)
     const [profile, setProfile] = useState(client?.profile)
-    console.log(profile);
-    
 
     const CreateFun = () => {
         setScroll(true)

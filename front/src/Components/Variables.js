@@ -39,3 +39,26 @@ export const clientvars = {
         },
     ]
 }
+
+export const fournisseurVars = {
+    activite: [
+        {
+            'title': "Prestation de service",
+            'val': 0,
+        },
+        {
+            'title': "Bien d'équipement",
+            'val': 1,
+        },
+    ],
+    forme: [
+        {
+            'title': "Personne Morale soumis à l'IS",
+            'val': 0,
+        },
+        {
+            'title': "Personne Physique soumis à l'IR (RNR/RNS)",
+            'val': 1,
+        },
+    ]
+}

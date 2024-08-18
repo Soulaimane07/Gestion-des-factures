@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import {Nodata, NodataFor} from "./Nodata"
+import { fournisseurVars } from "../Variables"
 
 export const FournisseurTable = ({fournisseurs, client}) => {
     return (
@@ -53,7 +54,7 @@ export const FournisseurTable = ({fournisseurs, client}) => {
                                     {item.code}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {item.activite}
+                                    {fournisseurVars?.activite[item?.activite]?.title}
                                 </td>
                             </tr>
                         ))}
@@ -117,7 +118,7 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                                 <td className="px-6 py-4">{item.if}</td>
                                 <td className="px-6 py-4">{item.ice}</td>
                                 <td className="px-6 py-4">{item.code}</td>
-                                <td className="px-6 py-4">{item.activite}</td>
+                                <td className="px-6 py-4"> {fournisseurVars?.activite[item?.activite]?.title}</td>
                             </tr>
                         ))}
                     </tbody>

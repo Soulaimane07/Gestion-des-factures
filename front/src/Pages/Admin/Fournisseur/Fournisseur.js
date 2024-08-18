@@ -6,6 +6,8 @@ import { openRemove } from '../../../Components/Redux/Slices/RemoveSlice';
 import { useDispatch } from 'react-redux';
 import { SecondCLientsTable } from '../../../Components/Tables.js/Clients';
 import Footer from '../../../Components/Footer/Footer';
+import { fournisseurVars } from '../../../Components/Variables';
+import { GreenBadget, RedBadget } from '../../../Components/Badges';
 
 function Fournisseur() {
     const {fournisseurid} = useParams()
@@ -17,6 +19,9 @@ function Fournisseur() {
     DocumentTitle(`Fizazi & Associes | Fournisseur`)
     const fournisseur = GetDataa(`/fournisseurs/${fournisseurid}`)
     const clients = GetData(`/fournisseurs/${fournisseurid}/clients`)
+
+    console.log(fournisseur);
+    
 
   return (
     <>
@@ -56,12 +61,43 @@ function Fournisseur() {
                         <p> {fournisseur?.ice} </p>
                     </div>
                     <div className='flex flex-col mb-6'>
-                        <label className='mb-2 opacity-60'> Type activité </label>
-                        <p> {fournisseur?.activite} </p>
-                    </div>
-                    <div className='flex flex-col mb-6'>
                         <label className='mb-2 opacity-60'> Code tiers </label>
                         <p> {fournisseur?.code}  </p>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2 opacity-60'> Exoneration </label>
+                        <p>
+                            {fournisseur?.exoneration 
+                                ?   <GreenBadget text="Inclus" /> 
+                                :   <RedBadget text="Exclus" />  
+                            }
+                        </p>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2 opacity-60'> Type activité </label>
+                        <p> {fournisseurVars?.activite[fournisseur?.activite]?.title} </p>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2 opacity-60'> Forme Juridique </label>
+                        <p> {fournisseurVars?.forme[fournisseur?.forme]?.title} </p>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2 opacity-60'> Application de la réglementation des monde public </label>
+                        <p>
+                            {fournisseur?.reglementation 
+                                ?   <GreenBadget text="Oui" /> 
+                                :   <RedBadget text="Non" />  
+                            }
+                        </p>
+                    </div>
+                    <div className='flex flex-col mb-6'>
+                        <label className='mb-2 opacity-60'> Présentation de l'attestation de régularité fiscale depuis de 6 mois </label>
+                        <p>
+                            {fournisseur?.fiscale 
+                                ?   <GreenBadget text="Oui" /> 
+                                :   <RedBadget text="Non" />  
+                            }
+                        </p>
                     </div>
                 </div>
             </div>
