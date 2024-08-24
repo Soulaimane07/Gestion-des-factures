@@ -9,6 +9,7 @@ const mongoose = require("mongoose")
 const usersRoutes = require('./api/routes/users')
 const fournisseurRoutes = require('./api/routes/fournisseur')
 const clientsRoutes = require('./api/routes/clients')
+const clientsfoursRoutes = require('./api/routes/clientFournisseur')
 
 
 
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
 app.use('/users', usersRoutes)
 app.use('/fournisseurs', fournisseurRoutes)
 app.use('/clients', clientsRoutes)
+app.use('/clientsfour', clientsfoursRoutes)
 
 
 app.use('/uploads', express.static('Uploads'))

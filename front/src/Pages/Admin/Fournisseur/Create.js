@@ -30,16 +30,15 @@ function Create() {
     const [forme, setForme] = useState(null)
     const [reglementation, setReglementation] = useState(null)
     const [fiscale, setFiscale] = useState(null)
-    const [ras, setRas] = useState(null)
 
 
     const CreateFun = () => {
         setScroll(true)
 
-        axios.post(`${ServerUrl}/fournisseurs`, {name, raisonsocial, if: iff, ice, code, activite, exoneration, forme, reglementation, fiscale, ras})
+        axios.post(`${ServerUrl}/fournisseurs`, {name, raisonsocial, if: iff, ice, code, activite, exoneration, forme, reglementation, fiscale})
         .then((res)=> {
             setScroll(false)
-            navigate('/fournisseurs')
+            navigate(-1);
             dispatch(fetchFournisseurs())
         })
         .catch(err => {
@@ -48,7 +47,8 @@ function Create() {
         })
     }
 
-    const cond = name?.length === 0 || raisonsocial?.length === 0 || iff?.length <= 0 || ice?.length <= 0 || code?.length === 0 || activite === null || exoneration === null || forme === null || fiscale === null || reglementation === null || ras === null
+    const cond = name?.length === 0 || raisonsocial?.length === 0 || iff?.length <= 0 || ice?.length <= 0 || code?.length === 0 || activite === null || exoneration === null || forme === null || fiscale === null || reglementation === null 
+    
 
 
   return (
@@ -82,16 +82,6 @@ function Create() {
                         <label className='mb-1'> Code tiers </label>
                         <i className='text-sm mb-2'> Description sur Code tiers </i>
                         <input onChange={(e)=> setCode(e.target.value)} type='text' className='border-2 border-gray-300 rounded-sm  py-1 px-4' />
-                    </div>
-                    <div className='flex flex-col mb-6'>
-                        <label className='mb-2'> Taux Ras </label>
-                        <select onChange={(e)=> setRas(e.target.value)} className='border-2 border-gray-300 rounded-sm py-1 px-4'>
-                            <option value={null}> Select Taux Ras </option>
-                            <option value={100}> 100% </option>
-                            <option value={75}> 75% </option>
-                            <option value={0}> 0% </option>
-                            
-                        </select>
                     </div>
                     <div className='flex flex-col mb-6'>
                         <label className='mb-2'> Exoneration </label>

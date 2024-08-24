@@ -60,5 +60,6 @@ export const fournisseurVars = {
             'title': "Personne Physique soumis à l'IR (RNR/RNS)",
             'val': 1,
         },
-    ]
+    ],
+    ras: [0,75,100]
 }

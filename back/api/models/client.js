@@ -12,10 +12,10 @@ const clientSchema = mongoose.Schema({
     ice: Number,
     natureclient: Number,
     exoneration: Boolean,
-    fournisseurs: [{ 
+    fournisseurs: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Fournisseur",
-    }],
-})
+        ref: "ClientFournisseur"
+    }]
+});
 
 module.exports = mongoose.model('Client', clientSchema)

@@ -1,158 +1,155 @@
-const express = require("express")
-const router = express.Router()
-const mongoose = require('mongoose')
+const express = require("express");
+const router = express.Router();
+const mongoose = require('mongoose');
 const multer = require('multer');
+const Client = require('../models/client');
+const ClientFournisseur = require('../models/ClientFour');
 
+// Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/profiles/clients'); // specify your upload folder
+        cb(null, 'uploads/profiles/clients');
     },
     filename: (req, file, cb) => {
         cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-
-const Client = require('../models/client')
-
-router.get('/', (req, res, next) => {
-    Client.find()
-        .select('_id profile name raisonsocial if ice natureclient exoneration fournisseurs')
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
-
-router.post('/', upload.single('profile'), (req, res, next) => {
-    const client = new Client({
-        _id: new mongoose.Types.ObjectId(),
-        profile: req?.file?.path, // the path of the uploaded image
-        name: req.body.name,
-        raisonsocial: req.body.raisonsocial,
-        if: Number(req.body.if),
-        ice: Number(req.body.ice),
-        natureclient: Number(req.body.natureclient),
-        exoneration: req.body.exoneration,
-        fournisseurs: req.body.fournisseurs,
-    });
-
-    client.save()
-        .then(docs => {
-            res.status(201).json(docs);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        });
+// GET all clients
+router.get('/', async (req, res) => {
+    try {
+        const clients = await Client.find()
+            .select('_id profile name raisonsocial if ice natureclient exoneration fournisseurs')
+            .exec();
+        res.status(200).json(clients);
+    } catch (err) {
+        handleError(res, err);
+    }
 });
 
-router.post('/selectfournisseurs', (req, res, next) => {
-    const client = req.body.client
-    const fournisseurs = req.body.fournisseurs
+// POST a new client with file upload
+router.post('/', upload.single('profile'), async (req, res) => {
+    const { name, raisonsocial, if: ifNumber, ice, natureclient, exoneration, fournisseurs } = req.body;
 
-    const UpdateClient = {
-        name: client.name,
-        raisonsocial: client.raisonsocial,
-        if: client.if,
-        ice: client.ice,
-        natureclient: client.natureclient,
-        exoneration: client.exoneration,
-        fournisseurs: fournisseurs,
+    if (!name || !raisonsocial) {
+        return res.status(400).json({ error: "Name and raison social are required" });
     }
 
-    Client.updateOne({_id: client._id}, {$set: UpdateClient})
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+    try {
+        const client = new Client({
+            _id: new mongoose.Types.ObjectId(),
+            profile: req?.file?.path, // profile image path
+            name,
+            raisonsocial,
+            if: Number(ifNumber),
+            ice: Number(ice),
+            natureclient: Number(natureclient),
+            exoneration,
+            fournisseurs
+        });
 
-router.get('/:clientId', (req, res, next) => {
-    const clientId = req.params.clientId
-
-    Client.findOne({_id: clientId})
-        .select("_id profile name raisonsocial if ice natureclient exoneration fournisseurs")
-        .populate('fournisseurs')
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err),
-            res.status(500).json({error: err})
-        })
-})
-
-router.patch('/:clientId',  upload.single('profile'), (req, res, next) => {
-    const clientId = req.params.clientId
-
-    const UpdateClient = {
-        profile: req?.file?.path ?? null,
-        name: req.body.name,
-        raisonsocial: req.body.raisonsocial,
-        if: req.body.if,
-        ice: req.body.ice,
-        natureclient: req.body.natureclient,
-        exoneration: req.body.exoneration,
-        fournisseurs: req.body.fournisseurs,
+        const result = await client.save();
+        res.status(201).json(result);
+    } catch (err) {
+        handleError(res, err);
     }
+});
 
-    Client.updateOne({_id: clientId}, {$set: UpdateClient})
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+// GET a client by ID with populated fournisseurs
+router.get('/:clientId', async (req, res) => {
+    try {
+        // Find the client
+        const client = await Client.findById(req.params.clientId)
+            .select('_id profile name raisonsocial if ice natureclient exoneration')
+            .exec();
 
-router.delete('/:clientId', (req, res, next) => {
-    const clientId = req.params.clientId
-   
-    Client.deleteOne({_id: clientId})
-        .exec()
-        .then(result => {
-            res.status(200).json(result)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+        if (!client) {
+            return res.status(404).json({ message: "Client not found" });
+        }
 
-router.delete('/', (req, res, next) => {
-    Client.deleteMany()
-        .exec()
-        .then(result => {
-            res.status(200).json(result)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+        // Find and populate associated ClientFournisseur documents
+        const clientFournisseurs = await ClientFournisseur.find({ client: req.params.clientId })
+            .populate('fournisseurs.fournisseur') // Populate the fournisseur details
+            .exec();
 
-module.exports = router
+        // Build the fournisseurs array with detailed data
+        const fournisseursWithRas = clientFournisseurs.flatMap(cf =>
+            cf.fournisseurs.map(f => ({
+                _id: f.fournisseur._id,
+                name: f.fournisseur.name,
+                raisonsocial: f.fournisseur.raisonsocial,
+                if: f.fournisseur.if,
+                ice: f.fournisseur.ice,
+                code: f.fournisseur.code,
+                exoneration: f.fournisseur.exoneration,
+                activite: f.fournisseur.activite,
+                forme: f.fournisseur.forme,
+                reglementation: f.fournisseur.reglementation,
+                fiscale: f.fournisseur.fiscale,
+                ras: f.ras
+            }))
+        );
+
+        // Combine client data with the formatted fournisseurs
+        const response = {
+                ...client.toObject(), // Convert mongoose document to plain object
+                fournisseurs: fournisseursWithRas
+        };
+
+        res.status(200).json(response);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+// PATCH a client by ID with file upload
+router.patch('/:clientId', upload.single('profile'), async (req, res) => {
+    try {
+        const updatedData = {
+            ...req.body,
+            profile: req?.file?.path || req.body.profile // Update profile image only if uploaded
+        };
+
+        const updatedClient = await Client.findByIdAndUpdate(req.params.clientId, { $set: updatedData }, { new: true }).exec();
+
+        if (!updatedClient) {
+            return res.status(404).json({ message: "Client not found" });
+        }
+
+        res.status(200).json(updatedClient);
+    } catch (err) {
+        handleError(res, err);
+    }
+});
+
+// DELETE a client by ID
+router.delete('/:clientId', async (req, res) => {
+    try {
+        const result = await Client.findByIdAndDelete(req.params.clientId).exec();
+
+        if (!result) {
+            return res.status(404).json({ message: "Client not found" });
+        }
+
+        res.status(200).json({ message: "Client deleted successfully" });
+    } catch (err) {
+        handleError(res, err);
+    }
+});
+
+// DELETE all clients
+router.delete('/', async (req, res) => {
+    try {
+        const result = await Client.deleteMany().exec();
+        res.status(200).json({ message: "All clients deleted successfully", result });
+    } catch (err) {
+        handleError(res, err);
+    }
+});
+
+module.exports = router;

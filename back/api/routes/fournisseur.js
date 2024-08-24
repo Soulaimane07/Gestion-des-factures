@@ -1,139 +1,146 @@
-const express = require("express")
-const router = express.Router()
-const mongoose = require('mongoose')
+const express = require("express");
+const router = express.Router();
+const mongoose = require('mongoose');
+const Fournisseur = require('../models/fournisseur');
+const ClientFournisseur = require('../models/ClientFour');
 
-const Fournisseur = require('../models/fournisseur')
-const Client = require('../models/client')
+// Helper function to handle errors
+const handleError = (res, err) => {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+};
 
-router.get('/', (req, res, next) => {
-    Fournisseur.find()
-        .select('_id name raisonsocial if ice code ras exoneration activite forme reglementation fiscale')
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
-
-router.post('/', (req, res, next) => {
-    const fournisseur = new Fournisseur({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        raisonsocial: req.body.raisonsocial,
-        if: Number(req.body.if),
-        ice: Number(req.body.ice),
-        code: req.body.code,
-        exoneration: req.body.exoneration,
-        activite: Number(req.body.activite),
-        forme: Number(req.body.forme),
-        reglementation: req.body.reglementation,
-        fiscale: req.body.fiscale,
-        ras: Number(req.body.ras),
-    })
-
-    fournisseur.save()
-        .then(docs => {
-            res.status(201).json(docs)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({error: err})
-        })
-})
-
-router.get('/:fournisseurId', (req, res, next) => {
-    const fournisseurId = req.params.fournisseurId
-
-    Fournisseur.findOne({_id: fournisseurId})
-        .select("_id name raisonsocial if ice code ras exoneration activite forme reglementation fiscale")
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err),
-            res.status(500).json({error: err})
-        })
-})
-
-router.get('/:fournisseurId/clients', (req, res, next) => {
-    const fournisseurId = req.params.fournisseurId;
-
-    Client.find({ fournisseurs: fournisseurId }) 
-        .select("_id name raisonsocial if ice natureclient exoneration")
-        .exec()
-        .then(clients => {
-            res.status(200).json(clients); // Return the list of clients in the response
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ error: err }); // Handle any errors
-        });
+// GET all fournisseurs
+router.get('/', async (req, res) => {
+    try {
+        const fournisseurs = await Fournisseur.find()
+            .select('_id name raisonsocial if ice code ras exoneration activite forme reglementation fiscale')
+            .exec();
+        res.status(200).json(fournisseurs);
+    } catch (err) {
+        handleError(res, err);
+    }
 });
 
-router.patch('/:fournisseurId', (req, res, next) => {
-    const fournisseurId = req.params.fournisseurId
+// POST a new fournisseur
+router.post('/', async (req, res) => {
+    const { name, raisonsocial, if: ifNumber, ice, code, exoneration, activite, forme, reglementation, fiscale, ras } = req.body;
 
-    const UpdateFournisseur = {
-        name: req.body.name,
-        raisonsocial: req.body.raisonsocial,
-        if: Number(req.body.if),
-        ice: Number(req.body.ice),
-        code: req.body.code,
-        exoneration: req.body.exoneration,
-        activite: Number(req.body.activite),
-        forme: Number(req.body.forme),
-        reglementation: req.body.reglementation,
-        fiscale: req.body.fiscale,
-        ras: Number(req.body.ras),
+    if (!name || !raisonsocial) {
+        return res.status(400).json({ error: "Name and raison social are required" });
     }
 
-    Fournisseur.updateOne({_id: fournisseurId}, {$set: UpdateFournisseur})
-        .exec()
-        .then(docs => {
-            res.status(200).json(docs)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+    try {
+        const fournisseur = new Fournisseur({
+            _id: new mongoose.Types.ObjectId(),
+            name,
+            raisonsocial,
+            if: Number(ifNumber),
+            ice: Number(ice),
+            code,
+            exoneration,
+            activite: Number(activite),
+            forme: Number(forme),
+            reglementation,
+            fiscale,
+            ras: Number(ras),
+        });
 
-router.delete('/:fournisseurId', (req, res, next) => {
-    const fournisseurId = req.params.fournisseurId
-   
-    Fournisseur.deleteOne({_id: fournisseurId})
-        .exec()
-        .then(result => {
-            res.status(200).json(result)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+        const result = await fournisseur.save();
+        res.status(201).json(result);
+    } catch (err) {
+        handleError(res, err);
+    }
+});
 
-router.delete('/', (req, res, next) => {
-    Fournisseur.deleteMany()
-        .exec()
-        .then(result => {
-            res.status(200).json(result)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        })
-})
+// GET a fournisseur by ID
+ // Import Client model
 
-module.exports = router
+ router.get('/:fournisseurId', async (req, res) => {
+    try {
+        const fournisseurId = req.params.fournisseurId;
+
+        // Fetch fournisseur details
+        const fournisseur = await Fournisseur.findById(fournisseurId).exec();
+        if (!fournisseur) {
+            return res.status(404).json({ message: "Fournisseur not found" });
+        }
+
+        // Find ClientFournisseur documents related to this fournisseur
+        const clientFournisseurs = await ClientFournisseur.find({
+            'fournisseurs.fournisseur': fournisseurId
+        }).populate({
+            path: 'client',
+            select: '_id name raisonsocial if ice exoneration' // Fetch all fields you want to include in client data
+        }).exec();
+
+        if (!clientFournisseurs || clientFournisseurs.length === 0) {
+            return res.status(404).json({ message: "No clients found for this fournisseur" });
+        }
+
+        // Map clients with their associated ras values
+        const clientsWithRas = clientFournisseurs.flatMap(clientFournisseur =>
+            clientFournisseur.fournisseurs
+                .filter(f => f.fournisseur.toString() === fournisseurId)
+                .map(f => ({
+                    ...clientFournisseur.client.toObject(), // Include all fields of client
+                    ras: f.ras
+                }))
+        );
+
+        // Return structured response
+        res.status(200).json({
+            ...fournisseur?.toObject(), // Include all fields of fournisseur
+            clients: clientsWithRas
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+// PATCH a fournisseur by ID
+router.patch('/:fournisseurId', async (req, res) => {
+    try {
+        const updatedFournisseur = await Fournisseur.findByIdAndUpdate(
+            req.params.fournisseurId,
+            { $set: req.body },
+            { new: true }
+        ).exec();
+
+        if (!updatedFournisseur) {
+            return res.status(404).json({ message: "Fournisseur not found" });
+        }
+
+        res.status(200).json(updatedFournisseur);
+    } catch (err) {
+        handleError(res, err);
+    }
+});
+
+// DELETE a fournisseur by ID
+router.delete('/:fournisseurId', async (req, res) => {
+    try {
+        const result = await Fournisseur.findByIdAndDelete(req.params.fournisseurId).exec();
+        
+        if (!result) {
+            return res.status(404).json({ message: "Fournisseur not found" });
+        }
+
+        res.status(200).json({ message: "Fournisseur deleted successfully" });
+    } catch (err) {
+        handleError(res, err);
+    }
+});
+
+// DELETE all fournisseurs
+router.delete('/', async (req, res) => {
+    try {
+        const result = await Fournisseur.deleteMany().exec();
+        res.status(200).json({ message: "All fournisseurs deleted successfully", result });
+    } catch (err) {
+        handleError(res, err);
+    }
+});
+
+module.exports = router;
