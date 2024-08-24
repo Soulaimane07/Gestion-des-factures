@@ -71,12 +71,9 @@ router.post('/', async (req, res) => {
             'fournisseurs.fournisseur': fournisseurId
         }).populate({
             path: 'client',
-            select: '_id name raisonsocial if ice exoneration' // Fetch all fields you want to include in client data
+            select: '_id name raisonsocial if ice natureclient exoneration' // Fetch all fields you want to include in client data
         }).exec();
 
-        if (!clientFournisseurs || clientFournisseurs.length === 0) {
-            return res.status(404).json({ message: "No clients found for this fournisseur" });
-        }
 
         // Map clients with their associated ras values
         const clientsWithRas = clientFournisseurs.flatMap(clientFournisseur =>

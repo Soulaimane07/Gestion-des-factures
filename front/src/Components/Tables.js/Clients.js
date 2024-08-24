@@ -101,7 +101,9 @@ export const SecondCLientsTable = ({clients}) => {
                                 {item?.ice}
                             </td>
                             <td className="px-6 py-4">
-                                {clientvars?.nature[item?.natureclient]?.title?.length > 40 ? clientvars?.nature[item.natureclient]?.title?.slice(0, 40) + '...' : clientvars?.nature[item?.natureclient]?.title}
+                                {clientvars?.nature[item?.natureclient]?.title?.length > 40 ? clientvars?.nature[item?.natureclient]?.title?.slice(0, 40) + '...' : clientvars?.nature[item.natureclient]?.title}
+                                {/* {clientvars?.nature[item.natureclient]?.title?.length > 40 ? clientvars?.nature[item.natureclient]?.title?.slice(0, 40) + '...' : clientvars?.nature[item.natureclient]?.title} */}
+                                {/* {clientvars?.nature[item?.natureclient]?.title?.length > 40 ? clientvars?.nature[item.natureclient]?.title?.slice(0, 40) + '...' : clientvars?.nature[item?.natureclient]?.title} */}
                             </td>
                             <td className="px-6 py-4">
                                 {item?.exoneration
