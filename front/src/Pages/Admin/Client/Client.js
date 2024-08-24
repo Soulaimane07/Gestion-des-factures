@@ -94,7 +94,7 @@ function Client() {
 
                             {open && (
                                 <div className='pb-20'>
-                                    <FournisseurTableClient fournisseurs={client?.fournisseurs} client={true} />
+                                    <FournisseurTableClient fournisseurs={client?.fournisseurs} client={client} />
                                 </div>
                             )}
                         </div>

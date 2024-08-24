@@ -1,11 +1,48 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Nodata, NodataFor } from "./Nodata";
 import { fournisseurVars } from "../Variables";
+import { SiMicrosoftexcel } from "react-icons/si";
+import * as XLSX from 'xlsx';
+import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { setExcel } from "../Redux/Slices/ExcelSlice";
 
 const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
+    const fileInputRef = useRef(null); // Moved out of conditional logic
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     if (!fournisseurs?.length) {
         return client ? <NodataFor text="No fournisseurs for this client" /> : <Nodata text="No fournisseurs" />;
     }
+
+    // Function to handle file upload
+    const handleFileUpload = (event, fournisseur) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const binaryStr = e.target.result;
+                const workbook = XLSX.read(binaryStr, { type: 'binary' });
+
+                // Example: Read the first sheet as JSON
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const json = XLSX.utils.sheet_to_json(worksheet);
+                dispatch(setExcel({data: json, client, fournisseur}))
+                navigate(`/clients/${client?._id}/fournisseur/${fournisseur?._id}`)
+
+                console.log(`Data for fournisseur ID ${fournisseur._id}:`, json);
+            };
+            reader.readAsBinaryString(file);
+        }
+    };
+
+    // Trigger file input click
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
 
     return (
         <div className="overflow-x-auto">
@@ -20,6 +57,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                         <th scope="col" className="px-6 py-3">Code tiers</th>
                         <th scope="col" className="px-6 py-3">Type activité</th>
                         {showRas && <th scope="col" className="px-6 py-3">Ras</th>}
+                        <th scope="col" className="px-6 py-3">Excel</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,8 +73,23 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                             <td className="px-6 py-4">{item.if}</td>
                             <td className="px-6 py-4">{item.ice}</td>
                             <td className="px-6 py-4">{item.code}</td>
-                            <td className="px-6 py-4">{fournisseurVars?.activite[item.activite]?.title}</td>
+                            <td className="px-6 py-4">{item.activite}</td>
                             {showRas && <td className="px-6 py-4">{item.ras} %</td>}
+                            <td className="px-6 py-2">
+                                <button
+                                    onClick={() => handleButtonClick(item._id)}
+                                    className="bg-orange-500 w-full flex justify-center py-3 hover:bg-orange-600 transition-all rounded-sm text-white"
+                                >
+                                    <SiMicrosoftexcel size={20} />
+                                </button>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    accept=".xlsx, .xls"
+                                    onChange={(event) => handleFileUpload(event, item)}
+                                />
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -44,6 +97,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
         </div>
     );
 };
+
 
 export const FournisseurTable = (props) => <FournisseurTableBase {...props} showRas={false} />;
 export const FournisseurTableClient = (props) => <FournisseurTableBase {...props} showRas={true} />;
