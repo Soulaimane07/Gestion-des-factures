@@ -57,7 +57,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                         <th scope="col" className="px-6 py-3">Code tiers</th>
                         <th scope="col" className="px-6 py-3">Type activité</th>
                         {showRas && <th scope="col" className="px-6 py-3">Ras</th>}
-                        <th scope="col" className="px-6 py-3">Excel</th>
+                        {showRas &&<th scope="col" className="px-6 py-3">Excel</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -75,7 +75,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                             <td className="px-6 py-4">{item.code}</td>
                             <td className="px-6 py-4">{item.activite}</td>
                             {showRas && <td className="px-6 py-4">{item.ras} %</td>}
-                            <td className="px-6 py-2">
+                            {showRas &&<td className="px-6 py-2">
                                 <button
                                     onClick={() => handleButtonClick(item._id)}
                                     className="bg-orange-500 w-full flex justify-center py-3 hover:bg-orange-600 transition-all rounded-sm text-white"
@@ -89,7 +89,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                                     accept=".xlsx, .xls"
                                     onChange={(event) => handleFileUpload(event, item)}
                                 />
-                            </td>
+                            </td>}
                         </tr>
                     ))}
                 </tbody>

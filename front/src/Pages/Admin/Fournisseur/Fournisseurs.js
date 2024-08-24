@@ -14,11 +14,10 @@ function Fournisseurs() {
     useEffect(() => {
         window.scrollTo(0, 0);
         dispatch(clearSearch());
-    }, [dispatch]); // Added dispatch to dependencies
+    }, [dispatch]);
 
     const { data: fournisseurs, search } = useSelector(state => state.fournisseurs);
 
-    // Filter fournisseurs based on search input
     const filteredFournisseurs = fournisseurs?.filter(fournisseur =>
         fournisseur?.name?.toLowerCase().includes(search?.toLowerCase())
     );

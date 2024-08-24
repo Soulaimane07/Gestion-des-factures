@@ -13,9 +13,7 @@ function ClientFournisseur() {
     const [openC, setOpenC] = useState(false);
     const [openF, setOpenF] = useState(false);
 
-    console.log(excelData);
-
-    let keys = Object.keys(excelData?.data[0]);
+    let keys = excelData?.data.length > 0 ? Object.keys(excelData?.data[0]) : [];
 
 
 
@@ -25,16 +23,15 @@ function ClientFournisseur() {
             ...item,  // Keep existing fields
             client: excelData?.client?.name,  // Add client name field
             ras: excelData?.fournisseur?.ras,  // Add RAS field
+            "montant ras": (item[" TVA "] ?? item["TVA"] ?? item["tva"]) * excelData?.fournisseur?.ras / 100,  // Add RAS field
         }));
+        
 
-        // Create a new workbook and add the data to it
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(dataWithExtras);
 
-        // Append the worksheet to the workbook
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
 
-        // Export the workbook as an Excel file
         XLSX.writeFile(workbook, 'exported_data.xlsx');
     };
     
@@ -72,15 +69,18 @@ function ClientFournisseur() {
                     <h2 className='flex items-center justify-between font-medium  bg-gray-100 bg-opacity-80 py-6 px-8'>
                         <p className='text-lg'> Details </p>
                         <div className='flex items-center space-x-2 text-white'>
-                            <button
-                                onClick={handleExportToExcel}
-                                className='bg-orange-500 px-6 py-2 hover:bg-orange-600 transition-all text-md'
-                            >
-                                Export Excel
-                            </button>
+                            {keys?.length > 0 &&
+                                <button
+                                    onClick={handleExportToExcel}
+                                    className='bg-orange-500 px-6 py-2 hover:bg-orange-600 transition-all text-md'
+                                >
+                                    Export Excel
+                                </button>
+                            }
                         </div>
                     </h2>
                     <div className="overflow-x-auto">
+                        {keys?.length > 0 &&    
                             <table className="w-full text-sm text-left rtl:text-right text-gray-400">
                                 <thead className="text-xs uppercase bg-gray-700 text-gray-400">
                                     <tr>
@@ -103,12 +103,13 @@ function ClientFournisseur() {
                                                 {excelData?.fournisseur?.ras} %
                                             </td>
                                             <td className="px-6 py-4">
-                                                {row[" TVA "] * excelData?.fournisseur?.ras / 100} DH
+                                                {(row[" TVA "] ?? row["TVA"] ?? row["tva"]) * excelData?.fournisseur?.ras / 100} DH
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                        }
                     </div>
                 </div>
             </div>
