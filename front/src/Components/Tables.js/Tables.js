@@ -20,20 +20,29 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
     // Function to handle file upload
     const handleFileUpload = (event, fournisseur) => {
         const file = event.target.files[0];
+
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const binaryStr = e.target.result;
                 const workbook = XLSX.read(binaryStr, { type: 'binary' });
-
+    
                 // Example: Read the first sheet as JSON
                 const firstSheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[firstSheetName];
                 const json = XLSX.utils.sheet_to_json(worksheet);
-                dispatch(setExcel({data: json, client, fournisseur}))
-                navigate(`/clients/${client?._id}/fournisseur/${fournisseur?._id}`)
-
-                console.log(`Data for fournisseur ID ${fournisseur._id}:`, json);
+    
+                // Filter the rows based on the fournisseur value
+                const filteredData = json.filter(row => row["FOURNISSEUR"] === fournisseur?.name);
+    
+                // Dispatch the filtered data along with client and fournisseur
+                dispatch(setExcel({ data: filteredData, client, fournisseur }));
+                
+                // Navigate to the desired route
+                navigate(`/clients/${client?._id}/fournisseur/${fournisseur?._id}`);
+    
+                // Log filtered data for debugging
+                console.log(`Filtered data for fournisseur name ${fournisseur?.name}:`, filteredData);
             };
             reader.readAsBinaryString(file);
         }
@@ -73,7 +82,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                             <td className="px-6 py-4">{item.if}</td>
                             <td className="px-6 py-4">{item.ice}</td>
                             <td className="px-6 py-4">{item.code}</td>
-                            <td className="px-6 py-4">{item.activite}</td>
+                            <td className="px-6 py-4">{fournisseurVars?.activite[item?.activite]?.title}</td>
                             {showRas && <td className="px-6 py-4">{item.ras} %</td>}
                             {showRas &&<td className="px-6 py-2">
                                 <button
@@ -139,7 +148,7 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                             const selectedFournisseur = selectedfournisseurs.find(f => f.fournisseur === item._id);
                             return (
                                 <tr key={item._id} className="border-b cursor-pointer hover:bg-gray-200 transition-all text-gray-900 border-gray-200">
-                                    <td className="px-6 py-4">
+                                    <td onClick={() => toggleFournisseur(item)} className="px-6 py-4">
                                         <input
                                             type="checkbox"
                                             className="scale-125 accent-orange-500"
@@ -147,15 +156,15 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                                             onChange={() => toggleFournisseur(item)}
                                         />
                                     </td>
-                                    <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
+                                    <th onClick={() => toggleFournisseur(item)} scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
                                         <Link to={`/fournisseurs/${item._id}`} className="hover:text-orange-500 transition-all underline text-blue-500">
                                             {item._id}
                                         </Link>
                                     </th>
                                     {['name', 'raisonsocial', 'if', 'ice', 'code'].map((field, idx) => (
-                                        <td key={idx} className="px-6 py-4">{item[field]}</td>
+                                        <td onClick={() => toggleFournisseur(item)} key={idx} className="px-6 py-4">{item[field]}</td>
                                     ))}
-                                    <td className="px-6 py-4">{fournisseurVars?.activite[item.activite]?.title}</td>
+                                    <td onClick={() => toggleFournisseur(item)} className="px-6 py-4">{fournisseurVars?.activite[item.activite]?.title}</td>
                                     <td className="px-6 py-4">
                                         <select
                                             value={selectedFournisseur?.ras || 0}
