@@ -95,7 +95,7 @@ function Create() {
                                             <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                                             <p className="text-xs text-gray-500">PNG, JPG</p>
                                         </div>
-                                        <input id="dropzone-file" onChange={onImageChange} type="file" className="hidden" accept="image/png, image/jpeg" />
+                                        <input id="dropzone-file" onChange={onImageChange} type="file" className="hidden" accept="image/png, image/gif, image/jpeg" />
                                     </label>
                                 </div>
                             )}

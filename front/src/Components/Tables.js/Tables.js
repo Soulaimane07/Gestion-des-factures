@@ -6,6 +6,7 @@ import * as XLSX from 'xlsx';
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { setExcel } from "../Redux/Slices/ExcelSlice";
+import { GetRas } from "../Functions";
 
 const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
     const fileInputRef = useRef(null); // Moved out of conditional logic
@@ -42,7 +43,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                 navigate(`/clients/${client?._id}/fournisseur/${fournisseur?._id}`);
     
                 // Log filtered data for debugging
-                console.log(`Filtered data for fournisseur name ${fournisseur?.name}:`, filteredData);
+                // console.log(`Filtered data for fournisseur name ${fournisseur?.name}:`, filteredData);
             };
             reader.readAsBinaryString(file);
         }
@@ -83,7 +84,7 @@ const FournisseurTableBase = ({ fournisseurs, client, showRas }) => {
                             <td className="px-6 py-4">{item.ice}</td>
                             <td className="px-6 py-4">{item.code}</td>
                             <td className="px-6 py-4">{fournisseurVars?.activite[item?.activite]?.title}</td>
-                            {showRas && <td className="px-6 py-4">{item.ras} %</td>}
+                            {showRas && <td className="px-6 py-4"> {GetRas(client, item)} %</td>}
                             {showRas &&<td className="px-6 py-2">
                                 <button
                                     onClick={() => handleButtonClick(item._id)}
