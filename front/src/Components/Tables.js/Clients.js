@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { GreenBadget, RedBadget } from "../Badges"
 import { Nodata } from "./Nodata"
 import { clientvars } from "../Variables"
+import { GetRas } from "../Functions";
 
 
 export const MainCLientsTable = ({ clients }) => {
@@ -48,7 +49,7 @@ export const MainCLientsTable = ({ clients }) => {
 };
 
 
-export const SecondCLientsTable = ({clients}) => {
+export const SecondCLientsTable = ({clients, fournisseur}) => {
     return (
         <div className="overflow-x-auto">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -112,7 +113,8 @@ export const SecondCLientsTable = ({clients}) => {
                                 }
                             </td>
                             <td className="px-6 py-4">
-                                {item?.ras}
+                                {/* {item?.ras} */}
+                                {GetRas(item, fournisseur)} %
                             </td>
                         </tr>
                     ))}

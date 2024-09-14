@@ -102,7 +102,7 @@ function Fournisseur() {
                             </button>
                             {open && 
                                 fournisseur?.clients?.length > 0 && (
-                                    <SecondCLientsTable clients={fournisseur?.clients} />
+                                    <SecondCLientsTable fournisseur={fournisseur} clients={fournisseur?.clients} />
                                 )
                             }
                         </div>

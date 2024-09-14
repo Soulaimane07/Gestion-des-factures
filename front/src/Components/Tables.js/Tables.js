@@ -131,7 +131,7 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
         <div className="overflow-x-auto">
             {fournisseurs?.length ? (
                 <table className="w-full text-sm text-left rtl:text-right text-gray-400">
-                    <thead className="text-xs uppercase bg-gray-700 text-gray-400">
+                    <thead className="text-xs uppercase  bg-gray-700 text-gray-400">
                         <tr>
                             <th className="px-6 py-3"></th>
                             <th className="px-6 py-3">Fournisseur ID</th>
@@ -141,14 +141,13 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                             <th className="px-6 py-3">ICE</th>
                             <th className="px-6 py-3">Code tiers</th>
                             <th className="px-6 py-3">Type activité</th>
-                            <th className="px-6 py-3">Taux Ras</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {fournisseurs.map((item) => {
+                    <tbody className="w-full ">
+                        {fournisseurs.slice().reverse().map((item) => {
                             const selectedFournisseur = selectedfournisseurs.find(f => f.fournisseur === item._id);
                             return (
-                                <tr key={item._id} className="border-b cursor-pointer hover:bg-gray-200 transition-all text-gray-900 border-gray-200">
+                                <tr key={item._id} className="border-b  w-full cursor-pointer hover:bg-gray-200 transition-all text-gray-900 border-gray-200">
                                     <td onClick={() => toggleFournisseur(item)} className="px-6 py-4">
                                         <input
                                             type="checkbox"
@@ -166,18 +165,6 @@ export const FournisseurSelectTable = ({ fournisseurs, selectedfournisseurs, set
                                         <td onClick={() => toggleFournisseur(item)} key={idx} className="px-6 py-4">{item[field]}</td>
                                     ))}
                                     <td onClick={() => toggleFournisseur(item)} className="px-6 py-4">{fournisseurVars?.activite[item.activite]?.title}</td>
-                                    <td className="px-6 py-4">
-                                        <select
-                                            value={selectedFournisseur?.ras || 0}
-                                            disabled={!selectedFournisseur}
-                                            onChange={(e) => handleRasChange(item._id, e.target.value)}
-                                            className="bg-transparent outline-none w-full"
-                                        >
-                                            {fournisseurVars?.ras?.map((rasValue, key) => (
-                                                <option value={rasValue} key={key}>{rasValue} %</option>
-                                            ))}
-                                        </select>
-                                    </td>
                                 </tr>
                             );
                         })}
